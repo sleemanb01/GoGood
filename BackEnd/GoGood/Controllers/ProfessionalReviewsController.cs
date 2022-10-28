@@ -33,6 +33,7 @@ namespace GoGood.Controllers
         {
             var professionalReview = await _context.ProfessionalReviews.FindAsync(id);
 
+
             if (professionalReview == null)
             {
                 return NotFound();

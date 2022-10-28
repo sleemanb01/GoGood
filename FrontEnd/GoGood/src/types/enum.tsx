@@ -7,12 +7,24 @@ export enum USTATUS { //upload status
 
 export enum PSTATUS { // post status
   PENDING,
-  ANGELHANDLE,
-  ANGELTHANKED,
-  ACCEPTHELP,
-  SAYTHANKS,
+  WAITINGFORANGEL,
+  WAITINGFORDATE,
+  ISDATEOK,
+  INHANDLE,
   HANDLED,
+  PROPOSE, // ANGEL STATUS
+  SETDATE,
+  CHOOSEANOTHERDATE,
 }
+
+// export enum PSTATUS { // post status
+//   PENDING,
+//   ANGELHANDLE,
+//   ANGELTHANKED,
+//   ACCEPTHELP,
+//   SAYTHANKS,
+//   HANDLED,
+// }
 
 // 1 - isAngel | !isAngel, 0  => propse help ***
 // 2 - isAngel, 2 => cancel | set

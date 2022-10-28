@@ -2,7 +2,6 @@ import Geolocation from 'react-native-geolocation-service';
 import {useTranslation} from 'react-i18next';
 import {ILocation} from '../interfaces/ILocation';
 import {coordinate} from '../types/coordinate';
-import {PermissionsAndroid} from 'react-native';
 import {requestLocationPermission} from './requestPermission';
 
 export const getLocation = async (setPosition: Function) => {

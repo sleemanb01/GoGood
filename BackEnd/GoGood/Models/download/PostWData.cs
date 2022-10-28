@@ -5,7 +5,7 @@ namespace GoGood.Models
 {
     public partial class PostWData
     {
-        public ICollection<DPost> dPosts { get; set; } = new List<DPost>();
+        public ICollection<Post> posts { get; set; } = new List<Post>();
 
         public ICollection<DPerson> professionalProposers { get; set; } = new List<DPerson>();
 

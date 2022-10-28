@@ -8,6 +8,5 @@ namespace GoGood.Models
         public int Id { get; set; }
         public int? ProffessionalId { get; set; }
         public int? PostId { get; set; }
-
     }
 }

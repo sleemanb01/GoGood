@@ -7,6 +7,5 @@ namespace GoGood.Models
     {
         public int Id { get; set; }
         public string? FieldName { get; set; }
-
     }
 }

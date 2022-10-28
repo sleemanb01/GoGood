@@ -10,7 +10,6 @@ import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../../hooks/userCtx';
 import {useTranslation} from 'react-i18next';
 import {PrimaryButton} from '../../components/Buttons/PrimaryButton';
-import {postProfessionalFields} from '../../util/axios';
 
 export function WhatRYou() {
   const {t} = useTranslation();

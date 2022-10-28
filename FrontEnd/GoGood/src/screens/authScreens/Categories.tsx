@@ -9,7 +9,6 @@ import {categoriesStyles} from '../../styles/STYLES';
 import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../../hooks/userCtx';
 import {IField} from '../../interfaces/Upload/IField';
-
 import {IProfessionalFields} from '../../interfaces/Download/IProfessionalFields';
 import {useTranslation} from 'react-i18next';
 import {getFields, postProfessionalFields} from '../../util/axios';

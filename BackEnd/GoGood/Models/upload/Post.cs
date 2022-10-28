@@ -15,8 +15,7 @@ namespace GoGood.Models
         public double? PostLat { get; set; }
         public double? PostLng { get; set; }
         public int? ProffessionalId { get; set; }
-        public int? PostStatus { get; set; }
-        public int? IsDelete { get; set; }
-
+        public DateTime? HandleDate { get; set; }
+        public bool? PostStatus { get; set; }
     }
 }

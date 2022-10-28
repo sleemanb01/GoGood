@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace GoGood.Models
@@ -8,6 +8,5 @@ namespace GoGood.Models
         public int Id { get; set; }
         public int? PostId { get; set; }
         public byte[]? Gallery { get; set; }
-
     }
 }

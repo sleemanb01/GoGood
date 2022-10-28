@@ -20,10 +20,9 @@ namespace GoGood.Models
         public virtual DbSet<Person> People { get; set; } = null!;
         public virtual DbSet<PersonImage> PersonImages { get; set; } = null!;
         public virtual DbSet<Post> Posts { get; set; } = null!;
+        public virtual DbSet<PostGallery> PostGalleries { get; set; } = null!;
         public virtual DbSet<PostPropose> PostProposes { get; set; } = null!;
-        public virtual DbSet<PostGallery> PostGallery { get; set; } = null!;
         public virtual DbSet<ProfessionalField> ProfessionalFields { get; set; } = null!;
-        public virtual DbSet<ProfessionalInfo> ProfessionalInfos { get; set; } = null!;
         public virtual DbSet<ProfessionalReview> ProfessionalReviews { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -65,14 +64,11 @@ namespace GoGood.Models
 
             modelBuilder.Entity<PersonImage>(entity =>
             {
-                entity.ToTable("PersonImage");
-
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.PersonId).HasColumnName("personId");
 
-                entity.Property(e => e.pImage).HasColumnName("pImage");
-
+                entity.Property(e => e.PersonImage1).HasColumnName("personImage");
             });
 
             modelBuilder.Entity<Post>(entity =>
@@ -83,7 +79,10 @@ namespace GoGood.Models
 
                 entity.Property(e => e.FieldId).HasColumnName("fieldId");
 
-                entity.Property(e => e.IsDelete).HasColumnName("isDelete");
+                entity.Property(e => e.HandleDate)
+                    .HasColumnType("date")
+                    .HasColumnName("handleDate")
+                    .HasDefaultValueSql("(CONVERT([date],getdate(),(105)))");
 
                 entity.Property(e => e.PersonId).HasColumnName("personId");
 
@@ -107,7 +106,17 @@ namespace GoGood.Models
                     .HasColumnName("postTitle");
 
                 entity.Property(e => e.ProffessionalId).HasColumnName("proffessionalId");
+            });
 
+            modelBuilder.Entity<PostGallery>(entity =>
+            {
+                entity.ToTable("PostGallery");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Gallery).HasColumnName("gallery");
+
+                entity.Property(e => e.PostId).HasColumnName("postId");
 
             });
 
@@ -123,18 +132,6 @@ namespace GoGood.Models
 
             });
 
-            modelBuilder.Entity<PostGallery>(entity =>
-            {
-                entity.ToTable("PostGallery");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.PostId).HasColumnName("postId");
-
-                entity.Property(e => e.Gallery).HasColumnName("gallery");
-
-            });
-
             modelBuilder.Entity<ProfessionalField>(entity =>
             {
                 entity.ToTable("ProfessionalField");
@@ -144,23 +141,6 @@ namespace GoGood.Models
                 entity.Property(e => e.FieldId).HasColumnName("fieldId");
 
                 entity.Property(e => e.PersonId).HasColumnName("personId");
-
-            });
-
-            modelBuilder.Entity<ProfessionalInfo>(entity =>
-            {
-                entity.ToTable("ProfessionalInfo");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.FormalImage).HasColumnName("formalImage");
-
-                entity.Property(e => e.NumberOfRaters).HasColumnName("numberOfRaters");
-
-                entity.Property(e => e.PersonId).HasColumnName("personId");
-
-                entity.Property(e => e.Rating).HasColumnName("rating");
-
             });
 
             modelBuilder.Entity<ProfessionalReview>(entity =>
@@ -178,8 +158,7 @@ namespace GoGood.Models
                     .HasColumnName("reviewDate")
                     .HasDefaultValueSql("(CONVERT([date],getdate(),(105)))");
 
-                entity.Property(e => e.Reviewer).HasColumnName("reviewer");
-
+                entity.Property(e => e.ReviewerId).HasColumnName("reviewerId");
             });
 
             OnModelCreatingPartial(modelBuilder);

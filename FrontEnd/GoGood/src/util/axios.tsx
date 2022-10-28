@@ -27,7 +27,6 @@ export const getPosts = async (
       const finalData = adjustPostData(result.data);
       setIsLoading(false);
       setPosts(finalData);
-      // return result.data
     } catch (err) {
       console.log(err);
       navigation.navigate('ErrorScreen');
@@ -95,7 +94,6 @@ export const signInUp = async (
   const controller = 'Persons/signInUp/';
   try {
     const result = await axios.post(url + controller, person);
-    // console.log(result.data);
 
     (async () => {
       authCtx.authenticate(result.data as IPersonWFields);
@@ -111,8 +109,6 @@ export async function updatePerson(
   authCtx: ICtx,
   setSuccess: Function,
 ) {
-  // console.log('axios', user.personImage);
-
   try {
     const controller = 'Persons/putDPerson';
     const result = await axios.post(url + controller, user);
