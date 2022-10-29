@@ -20,88 +20,28 @@ namespace GoGood.Controllers
             _context = context;
         }
 
-        // GET: api/Fields
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Field>>> GetFields()
+        // POST: api/ProfessionalFields/postProfessionalFields
+        [HttpPost("postProfessionalFields")]
+        public async Task<ActionResult<ProfessionalField[]>> PostProfessionalFields(ProfessionalField[] professionalFields)
         {
-            return await _context.Fields.ToListAsync();
-        }
-
-        // GET: api/Fields/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Field>> GetField(int id)
-        {
-            var @field = await _context.Fields.FindAsync(id);
-
-            if (@field == null)
-            {
-                return NotFound();
-            }
-
-            return @field;
-        }
-
-        // PUT: api/Fields/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutField(int id, Field @field)
-        {
-            if (id != @field.Id)
+            if (professionalFields == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(@field).State = EntityState.Modified;
-
             try
             {
+                _context.ProfessionalFields.AddRange(professionalFields);
+
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                if (!FieldExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw e;
             }
 
-            return NoContent();
-        }
+            return professionalFields;
 
-        // POST: api/Fields
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Field>> PostField(Field @field)
-        {
-            _context.Fields.Add(@field);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetField", new { id = @field.Id }, @field);
-        }
-
-        // DELETE: api/Fields/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteField(int id)
-        {
-            var @field = await _context.Fields.FindAsync(id);
-            if (@field == null)
-            {
-                return NotFound();
-            }
-
-            _context.Fields.Remove(@field);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool FieldExists(int id)
-        {
-            return _context.Fields.Any(e => e.Id == id);
         }
     }
 }

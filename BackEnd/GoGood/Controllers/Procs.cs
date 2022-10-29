@@ -35,7 +35,7 @@ namespace GoGood
                         var image = dr.GetValue(3);
                         if (!DBNull.Value.Equals(image))
                         {
-                            dPerson.pImage = Encoding.UTF8.GetString((byte[])image);
+                            dPerson.pImage = (byte[])image;
                         }
                         else
                         {
@@ -94,8 +94,8 @@ namespace GoGood
                     cmd.Parameters.AddWithValue("@phone", dPerson.person.Phone);
                     if (data != null)
                     {
-                        byte[] tmp = Encoding.ASCII.GetBytes(data);
-                        cmd.Parameters.AddWithValue("@image", tmp);
+                        // byte[] tmp = Encoding.ASCII.GetBytes(data);
+                        cmd.Parameters.AddWithValue("@image", data);
                     }
                     con.Open();
                     SqlDataReader dr = cmd.ExecuteReader(); // running the SP
@@ -112,7 +112,7 @@ namespace GoGood
                         var image = dr.GetValue(3);
                         if (!DBNull.Value.Equals(image))
                         {
-                            dp.pImage = Encoding.UTF8.GetString((byte[])image);
+                            dp.pImage = (byte[])image;
                         }
                         else
                         {
@@ -183,7 +183,7 @@ namespace GoGood
                         var image = dr.GetValue(3);
                         if (!DBNull.Value.Equals(image))
                         {
-                            dp.pImage = Encoding.UTF8.GetString((byte[])image);
+                            dp.pImage = (byte[])image;
                         }
                         else
                         {
@@ -198,5 +198,160 @@ namespace GoGood
                 }
             }
         }
+
+        // ************************************************** POSTS
+
+        public static ICollection<Post> getPostsWFieldNames(string ids, string proc, string param)
+        {
+
+            var posts = new List<Post>();
+            using (SqlConnection con = new SqlConnection(conStr))
+            {
+                using (SqlCommand cmd = new SqlCommand(proc, con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue(param, ids);
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader(); // running the SP
+
+                    while (dr.Read())
+                    {
+                        var post = new Post();
+                        post.Id = dr.GetInt32(0);
+                        post.PostTitle = dr.GetString(1);
+                        post.PostDescription = dr.GetString(2);
+                        post.PostDate = dr.GetDateTime(3);
+                        post.PersonId = dr.GetInt32(4);
+                        post.PostLng = dr.GetDouble(5);
+                        post.PostLat = dr.GetDouble(6);
+                        var pId = dr.GetValue(7);
+                        if (!DBNull.Value.Equals(pId))
+                        {
+                            post.ProffessionalId = dr.GetInt32(7);
+                        }
+                        else
+                        {
+                            post.ProffessionalId = null;
+                        }
+                        post.PostStatus = dr.GetInt32(8);
+                        post.FieldId = dr.GetInt32(9);
+
+                        posts.Add(post);
+                    }
+
+                    con.Close();
+
+                    return posts;
+                }
+            }
+        }
+
+        public static ICollection<PostPropose> getProposes(string postIds)
+        {
+            var proposes = new List<PostPropose>();
+
+            using (SqlConnection con = new SqlConnection(conStr))
+            {
+                using (SqlCommand cmd = new SqlCommand("getProposes", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@List", postIds);
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader(); // running the SP
+
+                    while (dr.Read())
+                    {
+                        var propose = new PostPropose();
+                        propose.Id = dr.GetInt32(0);
+                        propose.ProffessionalId = dr.GetInt32(1);
+                        propose.PostId = dr.GetInt32(2);
+
+                        proposes.Add(propose);
+                    }
+
+                    con.Close();
+
+                    return proposes;
+                }
+            }
+        }
+
+        public static ICollection<PostGallery> getGallery(string postIds)
+        {
+            var galleries = new List<PostGallery>();
+
+            using (SqlConnection con = new SqlConnection(conStr))
+            {
+                using (SqlCommand cmd = new SqlCommand("getProposes", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@List", postIds);
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader(); // running the SP
+
+                    while (dr.Read())
+                    {
+                        var gallery = new PostGallery();
+                        gallery.Id = dr.GetInt32(0);
+                        gallery.PostId = dr.GetInt32(1);
+                        var tmp = dr.GetValue(2);
+                        if (!DBNull.Value.Equals(tmp))
+                        {
+                            gallery.Gallery = (byte[])tmp;
+                        }
+                        else
+                        {
+                            gallery.Gallery = null;
+                        }
+
+                        galleries.Add(gallery);
+                    }
+
+                    con.Close();
+
+                    return galleries;
+                }
+            }
+        }
+
+        public static ICollection<DPerson> getProfessionalProposers(string proIds)
+        {
+            var pp = new List<DPerson>();
+
+            using (SqlConnection con = new SqlConnection(conStr))
+            {
+                using (SqlCommand cmd = new SqlCommand("getDPeople", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@List", proIds);
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader(); // running the SP
+
+                    while (dr.Read())
+                    {
+                        var person = new DPerson();
+                        person.person.Id = dr.GetInt32(0);
+                        person.person.Uname = dr.GetString(1);
+                        person.person.Phone = dr.GetString(2);
+                        var tmp = dr.GetValue(3);
+                        if (!DBNull.Value.Equals(tmp))
+                        {
+                            person.pImage = (byte[])tmp;
+                        }
+                        else
+                        {
+                            person.pImage = null;
+                        }
+
+                        pp.Add(person);
+                    }
+
+                    con.Close();
+
+                    return pp;
+                }
+            }
+        }
+
     }
 }

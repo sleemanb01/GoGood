@@ -20,58 +20,6 @@ namespace GoGood.Controllers
             _context = context;
         }
 
-        // GET: api/ProfessionalFields
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProfessionalField>>> GetProfessionalFields()
-        {
-            return await _context.ProfessionalFields.ToListAsync();
-        }
-
-        // GET: api/ProfessionalFields/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProfessionalField>> GetProfessionalField(int id)
-        {
-            var professionalField = await _context.ProfessionalFields.FindAsync(id);
-
-            if (professionalField == null)
-            {
-                return NotFound();
-            }
-
-            return professionalField;
-        }
-
-        // PUT: api/ProfessionalFields/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProfessionalField(int id, ProfessionalField professionalField)
-        {
-            if (id != professionalField.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(professionalField).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProfessionalFieldExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/ProfessionalFields
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -81,27 +29,6 @@ namespace GoGood.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProfessionalField", new { id = professionalField.Id }, professionalField);
-        }
-
-        // DELETE: api/ProfessionalFields/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProfessionalField(int id)
-        {
-            var professionalField = await _context.ProfessionalFields.FindAsync(id);
-            if (professionalField == null)
-            {
-                return NotFound();
-            }
-
-            _context.ProfessionalFields.Remove(professionalField);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ProfessionalFieldExists(int id)
-        {
-            return _context.ProfessionalFields.Any(e => e.Id == id);
         }
     }
 }

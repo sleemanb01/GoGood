@@ -23,36 +23,6 @@ namespace GoGood.Controllers
             _logger = logger;
         }
 
-        // GET: api/Persons/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Person>> GetPerson(int id)
-        {
-            var person = await _context.People.FindAsync(id);
-
-            if (person == null)
-            {
-                return NotFound();
-            }
-
-            return person;
-        }
-
-        // DELETE: api/Persons/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePerson(int id)
-        {
-            var person = await _context.People.FindAsync(id);
-            if (person == null)
-            {
-                return NotFound();
-            }
-
-            _context.People.Remove(person);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
         // POST: api/Persons/signInUp
         [HttpPost("signInUp")]
         public ActionResult<PersonWFields> signInUp(Person person)
@@ -84,6 +54,7 @@ namespace GoGood.Controllers
             return Procs.putUser(dPerson);
         }
 
+        // GET: api/Persons/GetPersonReviews
         [HttpGet("GetPersonReviews/{id}")]
         public ActionResult<ReviewWithPerson> GetPersonReviews(int id)
         {
@@ -108,8 +79,6 @@ namespace GoGood.Controllers
             {
                 throw e;
             }
-
-
         }
     }
 }

@@ -106,6 +106,8 @@ namespace GoGood.Models
                     .HasColumnName("postTitle");
 
                 entity.Property(e => e.ProffessionalId).HasColumnName("proffessionalId");
+
+                entity.Property(e => e.IsDelete).HasColumnName("isDelete");
             });
 
             modelBuilder.Entity<PostGallery>(entity =>

@@ -20,28 +20,6 @@ namespace GoGood.Controllers
             _context = context;
         }
 
-        // GET: api/ProfessionalReviews
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProfessionalReview>>> GetProfessionalReviews()
-        {
-            return await _context.ProfessionalReviews.ToListAsync();
-        }
-
-        // GET: api/ProfessionalReviews/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ProfessionalReview>> GetProfessionalReview(int id)
-        {
-            var professionalReview = await _context.ProfessionalReviews.FindAsync(id);
-
-
-            if (professionalReview == null)
-            {
-                return NotFound();
-            }
-
-            return professionalReview;
-        }
-
         // PUT: api/ProfessionalReviews/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

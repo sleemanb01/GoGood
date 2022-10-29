@@ -20,58 +20,6 @@ namespace GoGood.Controllers
             _context = context;
         }
 
-        // GET: api/PostProposes
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostPropose>>> GetPostProposes()
-        {
-            return await _context.PostProposes.ToListAsync();
-        }
-
-        // GET: api/PostProposes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PostPropose>> GetPostPropose(int id)
-        {
-            var postPropose = await _context.PostProposes.FindAsync(id);
-
-            if (postPropose == null)
-            {
-                return NotFound();
-            }
-
-            return postPropose;
-        }
-
-        // PUT: api/PostProposes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPostPropose(int id, PostPropose postPropose)
-        {
-            if (id != postPropose.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(postPropose).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PostProposeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/PostProposes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
