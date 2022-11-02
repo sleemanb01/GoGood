@@ -17,7 +17,7 @@ export const _FONTS = StyleSheet.create({
   },
   btnBlackText: {
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: 21,
     color: _COLORS.black,
   },
   btnBlackText2: {

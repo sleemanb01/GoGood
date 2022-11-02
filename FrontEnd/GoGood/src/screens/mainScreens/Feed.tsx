@@ -1,11 +1,9 @@
-import React, {useContext} from 'react';
-import {AuthContext} from '../../hooks/userCtx';
+import React from 'react';
 import {ILocation} from '../../interfaces/ILocation';
 import Posts from '../../components/Posts';
-import {IField} from '../../interfaces/Upload/IField';
-import {ICtx} from '../../interfaces/ICtx';
-import {IPersonWFields} from '../../interfaces/Download/IPersonWFields';
 import {Sort} from '../../components/util/Sort';
+import {IPersonWFields} from '../../interfaces/download';
+import {IField} from '../../interfaces/upload';
 
 export function Feed({
   currPosition,

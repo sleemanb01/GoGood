@@ -2,47 +2,43 @@ import React, {useContext, useEffect, useState} from 'react';
 import {View, Image, Text, Pressable, ScrollView} from 'react-native';
 import {CustGradient} from '../../components/util/CustGradient';
 import {RootStackParamList} from '../../types/RootStackParamList';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {_BUTTONS} from '../../styles/_BUTTONS';
 import {_FONTS} from '../../styles/_FONTS';
 import {categoriesStyles} from '../../styles/STYLES';
-import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../../hooks/userCtx';
-import {IField} from '../../interfaces/Upload/IField';
-import {IProfessionalFields} from '../../interfaces/Download/IProfessionalFields';
 import {useTranslation} from 'react-i18next';
-import {getFields, postProfessionalFields} from '../../util/axios';
+import {postProfessionalFields} from '../../util/axios';
 import {PrimaryButton} from '../../components/Buttons/PrimaryButton';
 import {LoadingScreen} from '../utilScreens/LoadingScreen';
+import {IField, IProfessionalField} from '../../interfaces/upload';
 
 interface ISelectField {
   field: IField;
   selected: boolean;
 }
 
-export function Categories() {
+type Props = NativeStackScreenProps<RootStackParamList, 'Categories'>;
+
+export function Categories({route, navigation}: Props) {
   const {t} = useTranslation();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const authCtx = useContext(AuthContext);
-  const [fields, setFields] = useState<IField[]>([]);
   const [selectedFields, setSelectedFields] = useState<ISelectField[]>([]);
   const [success, setSuccess] = useState(false);
 
+  const fields = route.params?.fields;
+  const personId = authCtx.userWField.dPerson?.person.id;
+
   if (success) {
-    authCtx.updateFields(getChoosenFields(selectedFields));
+    authCtx.updateFields(getChoosenFields(selectedFields, personId));
   }
 
   useEffect(() => {
-    getFields(setFields, navigation);
-  }, []);
-
-  useEffect(() => {
-    setSelectedFields(addSelection(fields));
+    setSelectedFields(addSelection(fields as IField[]));
   }, [fields]);
 
-  if (fields.length == 0) {
+  if (selectedFields.length === 0) {
     return <LoadingScreen />;
   }
 
@@ -54,10 +50,7 @@ export function Categories() {
 
   const submitHandler = async () => {
     postProfessionalFields(
-      adjustDataForUpload(
-        selectedFields,
-        authCtx.userWField.dPerson?.person.id,
-      ),
+      adjustDataForUpload(selectedFields, personId),
       navigation,
       setSuccess,
     );
@@ -99,15 +92,31 @@ export function Categories() {
   );
 }
 
-function getChoosenFields(fields: ISelectField[]): IField[] {
-  let arr: IField[] = [];
-
-  fields.map(curr => {
-    if (curr.selected) {
-      arr = [...arr, {id: curr.field.id, fieldName: curr.field.fieldName}];
+function getChoosenFields(
+  selectedFields: ISelectField[],
+  personId: number | undefined,
+): IField[] {
+  let pf: IField[] = [];
+  pf = [
+    ...pf,
+    {
+      id: selectedFields[0].field.id,
+      fieldName: selectedFields[0].field.fieldName,
+    },
+  ];
+  for (let i = 1; i < selectedFields.length; i++) {
+    if (selectedFields[i].selected) {
+      pf = [
+        ...pf,
+        {
+          id: selectedFields[i].field.id,
+          fieldName: selectedFields[i].field.fieldName,
+        },
+      ];
     }
-  });
-  return arr;
+  }
+
+  return pf;
 }
 
 function addSelection(fields: IField[]) {
@@ -127,11 +136,13 @@ function addSelection(fields: IField[]) {
 function adjustDataForUpload(
   selectedFields: ISelectField[],
   personId: number | undefined,
-): IProfessionalFields[] {
-  let arr: IProfessionalFields[] = [];
+): IProfessionalField[] {
+  let arr: IProfessionalField[] = [];
 
   selectedFields.map(curr => {
-    arr = [...arr, {fieldId: curr.field.id, personId: personId as number}];
+    if (curr.selected) {
+      arr = [...arr, {fieldId: curr.field.id, personId: personId as number}];
+    }
   });
 
   return arr;

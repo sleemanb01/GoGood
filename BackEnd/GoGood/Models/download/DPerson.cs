@@ -8,6 +8,6 @@ namespace GoGood.Models
     public partial class DPerson
     {
         public Person person { get; set; } = new Person();
-        public byte[]? pImage { get; set; }
+        public string? pImage { get; set; }
     }
 }

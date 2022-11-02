@@ -1,38 +1,41 @@
 import React from 'react';
 import {ScrollView, Text, View} from 'react-native';
-import {IDisplayPost} from '../interfaces/IDisplayPost';
+import {IDisplayPost} from '../interfaces/view';
 import {_FONTS} from '../styles/_FONTS';
 import {postStyles} from '../styles/STYLES';
 import {timeAgo} from '../util/timeAgo';
 import {getDistanceInMeter} from '../util/location';
 import {ILocation} from '../interfaces/ILocation';
-import {ImageView} from './ImageView';
 import {_BUTTONS} from '../styles/_BUTTONS';
 import {PStatusButtons} from './util/PStatusButtons';
 import {PSTATUS} from '../types/enum';
-import {IPersonWFields} from '../interfaces/Download/IPersonWFields';
 import {ReadMoreLess} from './util/ReadMoreLess';
+import {IPersonWFields} from '../interfaces/download';
+import {ImageView} from './util/ImageView';
+import {IField} from '../interfaces/upload';
 
 export function Post({
+  field,
   post,
   position,
   user,
 }: {
+  field: IField;
   post: IDisplayPost;
   position: ILocation | null | undefined;
   user: IPersonWFields;
 }) {
-  const myPost = user.dPerson?.person.id === post.dPost.personId;
+  const myPost = user.dPerson?.person.id === post.post.personId;
 
   let dist = '';
-  if (position && post.dPost.postLat && post.dPost.postLng && !myPost) {
-    dist = getDistanceInMeter(post.dPost.postLat, post.dPost.postLng, position);
+  if (position && post.post.postLat && post.post.postLng && !myPost) {
+    dist = getDistanceInMeter(post.post.postLat, post.post.postLng, position);
   }
 
   const isAngel = user.professionalFields.length > 1;
 
   const calcStatus = (): PSTATUS => {
-    switch (post.dPost.postStatus) {
+    switch (post.post.postStatus) {
       case 2: {
         if (isAngel) {
           return 2;
@@ -66,9 +69,9 @@ export function Post({
     <View style={postStyles.container}>
       <View style={postStyles.headerContainer}>
         <View style={postStyles.headerRightSide}>
-          <Text style={_FONTS.sideInfoBold}>{post.dPost.field.fieldName}</Text>
+          <Text style={_FONTS.sideInfoBold}>{field.fieldName}</Text>
           <Text style={_FONTS.sideInfo}>
-            {timeAgo(new Date(post.dPost.postDate))}
+            {timeAgo(new Date(post.post.postDate))}
           </Text>
         </View>
         <View style={postStyles.headerLeftSide}>
@@ -76,8 +79,8 @@ export function Post({
         </View>
       </View>
       <View style={postStyles.mainContainer}>
-        <Text style={_FONTS.title}>{post.dPost.postTitle}</Text>
-        <ReadMoreLess Description={post.dPost.postDescription} />
+        <Text style={_FONTS.title}>{post.post.postTitle}</Text>
+        <ReadMoreLess Description={post.post.postDescription} />
         <ScrollView>
           <ImageView gallery={post.postGallery} />
         </ScrollView>

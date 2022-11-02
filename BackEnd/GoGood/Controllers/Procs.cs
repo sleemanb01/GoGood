@@ -35,7 +35,7 @@ namespace GoGood
                         var image = dr.GetValue(3);
                         if (!DBNull.Value.Equals(image))
                         {
-                            dPerson.pImage = (byte[])image;
+                            dPerson.pImage = Encoding.UTF8.GetString((byte[])image);
                         }
                         else
                         {
@@ -50,10 +50,10 @@ namespace GoGood
             }
         }
 
-        public static List<Field> getFieldsByPersonId(int id)
+        public static List<ProfessionalField> getFieldsByPersonId(int id)
         {
 
-            var fields = new List<Field>();
+            var pf = new List<ProfessionalField>();
 
             using (SqlConnection con = new SqlConnection(conStr))
             {
@@ -66,16 +66,17 @@ namespace GoGood
 
                     while (dr.Read())
                     {
-                        var tmp = new Field();
+                        var tmp = new ProfessionalField();
                         tmp.Id = dr.GetInt32(0);
-                        tmp.FieldName = dr.GetString(1);
+                        tmp.PersonId = dr.GetInt32(1);
+                        tmp.FieldId = dr.GetInt32(2);
 
-                        fields.Add(tmp);
+                        pf.Add(tmp);
                     }
 
                     con.Close();
 
-                    return fields;
+                    return pf;
                 }
             }
         }
@@ -94,8 +95,8 @@ namespace GoGood
                     cmd.Parameters.AddWithValue("@phone", dPerson.person.Phone);
                     if (data != null)
                     {
-                        // byte[] tmp = Encoding.ASCII.GetBytes(data);
-                        cmd.Parameters.AddWithValue("@image", data);
+                        byte[] tmp = Encoding.ASCII.GetBytes(data);
+                        cmd.Parameters.AddWithValue("@image", tmp);
                     }
                     con.Open();
                     SqlDataReader dr = cmd.ExecuteReader(); // running the SP
@@ -112,7 +113,7 @@ namespace GoGood
                         var image = dr.GetValue(3);
                         if (!DBNull.Value.Equals(image))
                         {
-                            dp.pImage = (byte[])image;
+                            dp.pImage = Encoding.UTF8.GetString((byte[])image);
                         }
                         else
                         {
@@ -183,7 +184,7 @@ namespace GoGood
                         var image = dr.GetValue(3);
                         if (!DBNull.Value.Equals(image))
                         {
-                            dp.pImage = (byte[])image;
+                            dp.pImage = Encoding.UTF8.GetString((byte[])image);
                         }
                         else
                         {
@@ -336,7 +337,7 @@ namespace GoGood
                         var tmp = dr.GetValue(3);
                         if (!DBNull.Value.Equals(tmp))
                         {
-                            person.pImage = (byte[])tmp;
+                            person.pImage = Encoding.UTF8.GetString((byte[])tmp);
                         }
                         else
                         {

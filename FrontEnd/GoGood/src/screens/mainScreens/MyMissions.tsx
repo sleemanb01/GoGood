@@ -1,9 +1,8 @@
 import React from 'react';
 import {ILocation} from '../../interfaces/ILocation';
 import Posts from '../../components/Posts';
-
-import {IPersonWFields} from '../../interfaces/Download/IPersonWFields';
 import {Sort} from '../../components/util/Sort';
+import {IPersonWFields} from '../../interfaces/download';
 
 export function MyMissions({
   currPosition,

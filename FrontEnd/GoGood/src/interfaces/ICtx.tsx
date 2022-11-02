@@ -1,7 +1,5 @@
-import {IField} from './Upload/IField';
-import {IPerson} from './Upload/IPerson';
-import {IPersonWFields} from './Download/IPersonWFields';
-import {IDPerson} from './Download/IDPerson';
+import {IPersonWFields, IDPerson} from './download';
+import {IField, IProfessionalField} from './upload';
 
 export interface ICtx {
   isAuthenticated: boolean;

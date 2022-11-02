@@ -1,9 +1,8 @@
 import React, {createContext, useState} from 'react';
 import {ICtx} from '../interfaces/ICtx';
-import {IPersonWFields} from '../interfaces/Download/IPersonWFields';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {IField} from '../interfaces/Upload/IField';
-import {IDPerson} from '../interfaces/Download/IDPerson';
+import {IPersonWFields, IDPerson} from '../interfaces/download';
+import {IField, IProfessionalField} from '../interfaces/upload';
 
 const initialValue = {
   dPerson: null,

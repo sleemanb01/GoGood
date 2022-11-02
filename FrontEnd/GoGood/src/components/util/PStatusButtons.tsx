@@ -5,8 +5,8 @@ import React, {useContext, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Pressable, Text, Image, Share} from 'react-native';
 import {AuthContext} from '../../hooks/userCtx';
-import {IDisplayPost} from '../../interfaces/IDisplayPost';
-import {IPostPropose} from '../../interfaces/Upload/IPostPropose';
+import {IPostPropose} from '../../interfaces/upload';
+import {IDisplayPost} from '../../interfaces/view';
 import {imageStyles, postStyles} from '../../styles/STYLES';
 import {_BUTTONS} from '../../styles/_BUTTONS';
 import {_FONTS} from '../../styles/_FONTS';
@@ -34,7 +34,7 @@ export function PStatusButtons({
 
   const propseHelp = () => {
     let propose: IPostPropose = {
-      postId: post.dPost.id as number,
+      postId: post.post.id as number,
       proffessionalId: authCtx.userWField.dPerson?.person.id as number,
     };
     postPropose(propose, setSuccess);
@@ -63,7 +63,7 @@ export function PStatusButtons({
   };
 
   const postHandled = () => {
-    putPost(DToUPost(post.dPost), setSuccess);
+    putPost(DToUPost(post.post), setSuccess);
   };
 
   function SayThanks() {

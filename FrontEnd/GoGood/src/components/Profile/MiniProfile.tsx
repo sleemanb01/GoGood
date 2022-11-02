@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Image, Pressable, Text} from 'react-native';
-import {IPersonWFields} from '../../interfaces/Download/IPersonWFields';
+import {IPersonWFields} from '../../interfaces/download';
 import {commonStyles, imageStyles} from '../../styles/STYLES';
 import {_FONTS} from '../../styles/_FONTS';
 

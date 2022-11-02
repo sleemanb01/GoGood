@@ -40,15 +40,18 @@ namespace GoGood.Controllers
 
                 await _context.SaveChangesAsync();
 
-                var res = CreatedAtAction("GetPostGallery", new { id = postWGallery.post.Id }, postWGallery.post);
+                var res = CreatedAtAction("GetPost", new { id = postWGallery.post.Id }, postWGallery.post);
 
                 if (res.Value == null)
                 {
                     return NotFound();
                 }
 
-                _context.PostGalleries.AddRange(postWGallery.PostGallery);
-                var galleryRes = await _context.SaveChangesAsync();
+                if (postWGallery.PostGallery.Count > 0)
+                {
+                    _context.PostGalleries.AddRange(postWGallery.PostGallery);
+                    var galleryRes = await _context.SaveChangesAsync();
+                }
 
                 return Ok();
             }

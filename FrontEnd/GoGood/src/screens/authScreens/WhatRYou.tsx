@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, Pressable, Text, View} from 'react-native';
 import {CustGradient} from '../../components/util/CustGradient';
 import {_FONTS} from '../../styles/_FONTS';
@@ -10,6 +10,9 @@ import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../../hooks/userCtx';
 import {useTranslation} from 'react-i18next';
 import {PrimaryButton} from '../../components/Buttons/PrimaryButton';
+import {IField} from '../../interfaces/upload';
+import {getFields} from '../../util/axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function WhatRYou() {
   const {t} = useTranslation();
@@ -19,6 +22,19 @@ export function WhatRYou() {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const [isAngel, setIsAngel] = useState(false);
+  const [fields, setFields] = useState<IField[]>([]);
+
+  useEffect(() => {
+    getFields(setFields, navigation);
+  }, []);
+
+  useEffect(() => {
+    if (fields.length > 0) {
+      (async () => {
+        await AsyncStorage.setItem('fields', JSON.stringify(fields));
+      })();
+    }
+  }, [fields]);
 
   const btnPressHandler = (isAngel: boolean) => {
     setIsAngel(isAngel);
@@ -26,7 +42,7 @@ export function WhatRYou() {
 
   const submitHandler = () => {
     if (isAngel) {
-      navigation.navigate('Categories');
+      navigation.navigate('Categories', {fields: fields});
     } else {
       authCtx.updateFields([{id: 1, fieldName: 'none'}]);
     }

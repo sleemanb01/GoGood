@@ -1,14 +1,22 @@
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {memo, useContext, useEffect, useState} from 'react';
+import React, {
+  memo,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import {FlatList} from 'react-native';
 import {AuthContext} from '../hooks/userCtx';
-import {IDisplayPost} from '../interfaces/IDisplayPost';
+import {IDisplayPost} from '../interfaces/view';
 import {ILocation} from '../interfaces/ILocation';
 import {LoadingScreen} from '../screens/utilScreens/LoadingScreen';
 import {RootStackParamList} from '../types/RootStackParamList';
-import {getPosts} from '../util/axios';
+import {getFields, getPosts} from '../util/axios';
 import {Post} from './Post';
+import {IField} from '../interfaces/upload';
+import useAsyncStorage from '@react-native-async-storage/async-storage';
 
 function Posts({
   params,
@@ -23,13 +31,22 @@ function Posts({
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState<IDisplayPost[]>([]);
+  const [fields, setFields] = useState<IField[]>([]);
   const authCtx = useContext(AuthContext);
 
-  console.log('posts');
+  useLayoutEffect(() => {
+    (async () => {
+      const tmp = await useAsyncStorage.getItem('fields');
+      if (tmp) {
+        setFields(JSON.parse(tmp));
+      } else {
+        getFields(setFields, navigation);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     getPosts(params, setPosts, navigation, setIsLoading, controller);
-    // setPosts(if res is ok )
   }, []);
 
   if (isLoading) {
@@ -43,12 +60,15 @@ function Posts({
       data={posts}
       renderItem={itemData => (
         <Post
+          field={
+            fields.find(e => e.id === itemData.item.post.fieldId) as IField
+          }
           post={itemData.item}
           position={position}
           user={authCtx.userWField}
         />
       )}
-      keyExtractor={item => (item.dPost.id as number).toString()}
+      keyExtractor={item => (item.post.id as number).toString()}
     />
   );
 }

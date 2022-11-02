@@ -1,11 +1,12 @@
-import {IPersonWFields} from '../interfaces/Download/IPersonWFields';
+import {IPersonWFields} from '../interfaces/download';
 import {ICtx} from '../interfaces/ICtx';
 import {ILocation} from '../interfaces/ILocation';
+import {IField} from '../interfaces/upload';
 
 export type RootStackParamList = {
   Login: undefined;
   WhatRYou: undefined;
-  Categories: undefined;
+  Categories: {fields: IField[]} | undefined;
   Main: undefined;
   ErrorScreen: undefined;
   LoadingScreen: undefined;

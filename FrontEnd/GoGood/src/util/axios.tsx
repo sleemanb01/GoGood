@@ -1,16 +1,15 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
 import {RootStackParamList} from '../types/RootStackParamList';
-import {IPersonWFields} from '../interfaces/Download/IPersonWFields';
-import {IProfessionalFields} from '../interfaces/Download/IProfessionalFields';
 import {ICtx} from '../interfaces/ICtx';
-import {IPerson} from '../interfaces/Upload/IPerson';
 import {adjustPostData} from './dataHandler';
-import {IPost} from '../interfaces/Upload/IPost';
-import {IDPerson} from '../interfaces/Download/IDPerson';
-import {IPostWGallery} from '../interfaces/Upload/IPostWGallery';
-import {IPostPropose} from '../interfaces/Upload/IPostPropose';
+import {IPostWGallery, IPersonWFields, IDPerson} from '../interfaces/download';
+import {
+  IPerson,
+  IPostPropose,
+  IPost,
+  IProfessionalField,
+} from '../interfaces/upload';
 
 const url = 'http://10.0.2.2:7070/api/';
 
@@ -24,7 +23,7 @@ export const getPosts = async (
   if (param.length > 0) {
     try {
       const result = await axios.get(url + controller + param);
-      const finalData = adjustPostData(result.data);
+      const finalData = await adjustPostData(result.data);
       setIsLoading(false);
       setPosts(finalData);
     } catch (err) {
@@ -60,7 +59,6 @@ export const getFields = async (
     const result = await axios.get(url + controller);
     let data = result.data;
     if (result.status === 200) {
-      await AsyncStorage.setItem('fields', JSON.stringify(data));
       setFields(data);
     }
   } catch (err) {
@@ -70,11 +68,11 @@ export const getFields = async (
 };
 
 export const postProfessionalFields = async (
-  pFields: IProfessionalFields[],
+  pFields: IProfessionalField[],
   navigation: NativeStackNavigationProp<RootStackParamList>,
   setSuccess: Function,
 ) => {
-  const controller = 'ProfessionalFields/ss';
+  const controller = 'ProfessionalFields/postProfessionalFields';
   try {
     const result = await axios.post(url + controller, pFields);
     if (result.status === 200) {
@@ -96,6 +94,8 @@ export const signInUp = async (
     const result = await axios.post(url + controller, person);
 
     (async () => {
+      console.log(result.data);
+
       authCtx.authenticate(result.data as IPersonWFields);
     })();
   } catch (err) {
@@ -175,7 +175,6 @@ export async function getReviews(authCtx: ICtx, setReviews: Function) {
       url + controller + authCtx.userWField.dPerson?.person.id,
     );
     let data = result.data;
-    console.log(data);
 
     setReviews(data);
   } catch (err) {

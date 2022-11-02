@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {Asset} from 'react-native-image-picker';
 import {AuthContext} from '../../hooks/userCtx';
-import {IDPerson} from '../../interfaces/Download/IDPerson';
+import {IDPerson} from '../../interfaces/download';
 import {
   imageStyles,
   commonStyles,
@@ -18,8 +18,10 @@ import {
 } from '../../styles/STYLES';
 import {USTATUS} from '../../types/enum';
 import {updatePerson} from '../../util/axios';
+import {base64ToHex, getBytes} from '../../util/dataHandler';
 import {nonEmpty, phoneValidate} from '../../util/validation';
-import {ImagePickerModal} from '../ImagePickerModal';
+import {ImagePickerModal} from '../util/ImagePickerModal';
+
 import {UStatusImage} from '../util/UStatusImage';
 
 export function EditProfile() {
@@ -88,8 +90,11 @@ export function EditProfile() {
           uname: user.person.uname,
           phone: user.person.phone,
         },
-        pImage: urii[0].base64 as string,
+        pImage: getBytes(urii[0].base64 as string),
       };
+
+      // base64ToHex(urii[0].base64 as string);
+
       updatePerson(dPerson, authCtx, setIsImageUpdate);
     }
   }, [urii]);

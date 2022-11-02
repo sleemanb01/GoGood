@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GoGood.Models;
+using System.Text;
 
 
 namespace GoGood.Controllers
@@ -31,13 +32,19 @@ namespace GoGood.Controllers
 
             try
             {
-                var dPerson = new DPerson();
-                pwf.DPerson = Procs.getUser(person);
+                var dPerson = Procs.getUser(person);
 
-                var fields = new List<Field>();
-                fields = Procs.getFieldsByPersonId(dPerson.person.Id);
+                if (DBNull.Value.Equals(dPerson))
+                {
+                    return NotFound();
+                }
 
-                pwf.professionalFields = fields;
+                pwf.DPerson = dPerson;
+
+                var pf = new List<ProfessionalField>();
+                pf = Procs.getFieldsByPersonId(dPerson.person.Id);
+
+                pwf.professionalFields = pf;
 
                 return pwf;
             }
@@ -49,7 +56,7 @@ namespace GoGood.Controllers
 
         // POST: api/Persons/putDPerson
         [HttpPost("putDPerson")]
-        public ActionResult<DPerson> putDPerson(DPerson dPerson)
+        public ActionResult<DPerson> putDPerson([FromBody] DPerson dPerson)
         {
             return Procs.putUser(dPerson);
         }

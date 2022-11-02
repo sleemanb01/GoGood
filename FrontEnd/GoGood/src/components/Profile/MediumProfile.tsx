@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Image, Text} from 'react-native';
-import {IDPerson} from '../../interfaces/Download/IDPerson';
+import {IDPerson} from '../../interfaces/download';
 import {mediumProfileStyles, imageStyles} from '../../styles/STYLES';
 import {_FONTS} from '../../styles/_FONTS';
 

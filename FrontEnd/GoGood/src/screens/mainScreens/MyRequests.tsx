@@ -1,16 +1,13 @@
-import React, {useContext} from 'react';
-import {AuthContext} from '../../hooks/userCtx';
+import React from 'react';
 import {ILocation} from '../../interfaces/ILocation';
 import Posts from '../../components/Posts';
-
 import {PrimaryButton} from '../../components/Buttons/PrimaryButton';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/RootStackParamList';
-import {ICtx} from '../../interfaces/ICtx';
-import {IPersonWFields} from '../../interfaces/Download/IPersonWFields';
 import {Sort} from '../../components/util/Sort';
+import {IPersonWFields} from '../../interfaces/download';
 
 export function MyRequests({
   currPosition,

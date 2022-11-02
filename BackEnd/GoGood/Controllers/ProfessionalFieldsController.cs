@@ -30,5 +30,29 @@ namespace GoGood.Controllers
 
             return CreatedAtAction("GetProfessionalField", new { id = professionalField.Id }, professionalField);
         }
+
+        // POST: api/ProfessionalFields/postProfessionalFields
+        [HttpPost("postProfessionalFields")]
+        public async Task<ActionResult<ProfessionalField[]>> PostProfessionalFields(ProfessionalField[] professionalFields)
+        {
+            if (professionalFields == null)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _context.ProfessionalFields.AddRange(professionalFields);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return professionalFields;
+
+        }
     }
 }

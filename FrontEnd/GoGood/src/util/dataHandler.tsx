@@ -1,9 +1,7 @@
-import {IDPerson} from '../interfaces/Download/IDPerson';
-import {IDPost} from '../interfaces/Download/IDPost';
-import {IPostWData} from '../interfaces/Download/IPostWData';
-import {IDisplayPost} from '../interfaces/IDisplayPost';
-import {IPost} from '../interfaces/Upload/IPost';
-import {IPostPropose} from '../interfaces/Upload/IPostPropose';
+import useAsyncStorage from '@react-native-async-storage/async-storage';
+import {IDPerson, IPostWData} from '../interfaces/download';
+import {IPostPropose, IPost, IField} from '../interfaces/upload';
+import {IDisplayPost} from '../interfaces/view';
 
 const getProfessionals = (
   dataArr: IPostPropose[],
@@ -25,7 +23,7 @@ export const adjustPostData = (dataArr: IPostWData): IDisplayPost[] => {
   let finalData: IDisplayPost[] = [];
 
   if (dataArr) {
-    dataArr.dPosts.map((curr: IDPost) => {
+    dataArr.posts.map((curr: IPost) => {
       let postProposes: IPostPropose[] = dataArr.postProposes
         ? dataArr.postProposes.filter(
             propose => (propose.postId = curr.id as number),
@@ -40,7 +38,7 @@ export const adjustPostData = (dataArr: IPostWData): IDisplayPost[] => {
         : [];
 
       let post: IDisplayPost = {
-        dPost: curr,
+        post: curr,
         postGallery: postGallery,
         professionalProposers: professionalProposers,
         postProposes: postProposes,
@@ -52,17 +50,28 @@ export const adjustPostData = (dataArr: IPostWData): IDisplayPost[] => {
   return finalData;
 };
 
-export const DToUPost = (dPost: IDPost): IPost => {
-  return {
-    id: dPost.id,
-    postTitle: dPost.postTitle,
-    postDescription: dPost.postDescription,
-    postDate: dPost.postDate,
-    personId: dPost.personId,
-    fieldId: dPost.field.id,
-    postLat: dPost.postLat,
-    postLng: dPost.postLng,
-    proffessionalId: dPost.professionalId,
-    postStatus: dPost.postStatus,
-  };
+export const getBytes = (value: string) => {
+  let buffer = new ArrayBuffer(value.length * 2);
+  let view = new Uint16Array(buffer);
+
+  for (let i = 0; i < value.length; ++i) {
+    view[i] = value.charCodeAt(i);
+  }
+
+  return buffer;
+};
+
+export const bufferToString = (buffer: ArrayBuffer): string => {
+  return String.fromCharCode.apply(null, Array.from(new Uint16Array(buffer)));
+};
+
+export const base64ToHex = (str: string) => {
+  // const raw = atob(str);
+  let result = '';
+  for (let i = 0; i < str.length; i++) {
+    const hex = str.charCodeAt(i).toString(16);
+    result += hex.length === 2 ? hex : '0' + hex;
+  }
+  // return result.toUpperCase();
+  console.log(typeof result);
 };

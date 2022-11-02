@@ -4,18 +4,48 @@ GO
 
 --------------------------------------------------------
 
-CREATE PROCEDURE getPropose
-@postId int
+CREATE PROCEDURE getProposes
+@List nvarchar(max)
 
 as
 begin
-	SELECT *
-	FROM PostPropose
-	WHERE @postId = postId
+	--SELECT *
+	--FROM PostPropose
+	--WHERE @postId = postId
+
+	select *
+	  from PostPropose
+	  WHERE PostPropose.postId IN( SELECT postId = Item FROM SplitInts(@List, ',')); 
 end
 GO
 
-exec getPropose 3
+DROP Procedure getProposes
+GO
+
+exec getProposes '2,5'
+GO
+
+--------------------------------------------------------
+
+CREATE PROCEDURE getGallery
+@List nvarchar(max)
+
+as
+begin
+	--SELECT *
+	--FROM PostPropose
+	--WHERE @postId = postId
+
+	select *
+	  from PostGallery
+	  WHERE PostGallery.postId IN( SELECT postId = Item FROM SplitInts(@List, ',')); 
+end
+GO
+
+DROP Procedure getGallery
+GO
+
+exec getGallery '2,5'
 GO
 
 ---------------------------------
@@ -81,11 +111,11 @@ begin
 			begin
 				insert into PersonImage VALUES(@targetId, @image)
 			end
-
 		end
+
 		select Person.*, PersonImage.pImage
 		from Person left join PersonImage
-		on Person.id = personImage.personId
+		on Person.id = PersonImage.personId
 		where Person.id = @targetId
 	end
 end
@@ -97,6 +127,25 @@ DROP Procedure putDPerson
 GO
 
 select * from Person
+
+------------------------------------------------------------------
+
+CREATE PROCEDURE getFieldsByPersonId
+@personId int
+
+as
+begin
+		select ProfessionalField.* from Field
+		inner join ProfessionalField on 
+		ProfessionalField.fieldId = Field.id
+		where ProfessionalField.personId = @personId
+end
+go
+
+exec getFieldsByPersonId 1
+
+DROP Procedure getFieldsByPersonId
+GO
 
 ------------------------------------------------------------------
 
@@ -126,21 +175,23 @@ begin
 				end
 		end
 
-		select Person.*, PersonImage.pImage into #finalRes
+		select Person.*, PersonImage.pImage
 		from Person left join PersonImage
 		on Person.id = personImage.personId
 		where Person.id = @temp
 
 		--update #finalRes set personImage = 0 where personImage IS NULL
 
-		select * from #finalRes
+		--select * from #finalRes
 
-		select Field.id, Field.fieldName from Field
-		inner join ProfessionalField on 
-		ProfessionalField.fieldId = Field.id
-		where ProfessionalField.personId = @temp
+		--select Field.id, Field.fieldName from Field
+		--inner join ProfessionalField on 
+		--ProfessionalField.fieldId = Field.id
+		--where ProfessionalField.personId = @temp
 end
 go
+
+
 
 exec signInUp 'dd3 ddd', '1233211230'
 
@@ -151,30 +202,30 @@ select * from Person
 
 ------------------------------------------------------------------
 
-CREATE PROCEDURE getPersonFields
-@id INT
+--CREATE PROCEDURE getPersonFields
+--@id INT
 
-as
-begin
-	declare @FieldIds as table(fieldId INT)
-	insert into @FieldIds select ProfessionalField.fieldId From ProfessionalField WHERE ProfessionalField.personId = @id
+--as
+--begin
+--	declare @FieldIds as table(fieldId INT)
+--	insert into @FieldIds select ProfessionalField.fieldId From ProfessionalField WHERE ProfessionalField.personId = @id
 
-	declare @finalRes as table(fieldId INT, fieldName nvarchar(50))
-	insert into @finalRes select Field.id, Field.fieldName
-	from Field 
-	JOIN @FieldIds t1 ON t1.fieldId = Field.id
+--	declare @finalRes as table(fieldId INT, fieldName nvarchar(50))
+--	insert into @finalRes select Field.id, Field.fieldName
+--	from Field 
+--	JOIN @FieldIds t1 ON t1.fieldId = Field.id
 
-	select * from @finalRes
+--	select * from @finalRes
 
-end
-GO
+--end
+--GO
 
-select * from ProfessionalField
+--select * from ProfessionalField
 
-exec getPersonFields 1
+--exec getPersonFields 1
 
-DROP Procedure getPersonFields
-GO
+--DROP Procedure getPersonFields
+--GO
 
 ------------------------------------------------------------------
 
@@ -183,7 +234,7 @@ CREATE PROCEDURE getPostsByPerson
 
 as
 Begin
- select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId, Field.fieldName into #postTable 
+ select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId into #postTable 
 	  from Post left JOIN Field 
 	  ON Field.id = Post.fieldId 
 	  WHERE Post.isDelete = 0 AND Post.personId = @PersonId
@@ -199,11 +250,11 @@ Begin
 
 	  --update #dPerson set personImage = 0 where personImage IS NULL
 
-	  select * from #dPerson
+	  --select * from #dPerson
 
-	  select PostPropose.* from PostPropose join #dPerson t1 on PostPropose.proffessionalId = t1.id
+	  --select PostPropose.* from PostPropose join #dPerson t1 on PostPropose.proffessionalId = t1.id
 
-	  select PostGallery.* from PostGallery join #postTable t1 on t1.id = PostGallery.postId
+	  --select PostGallery.* from PostGallery join #postTable t1 on t1.id = PostGallery.postId
 end
 GO
 
@@ -277,11 +328,11 @@ GO
 
 	  --update #dPerson set personImage = 0 where personImage IS NULL
 
-	  select * from #dPerson
+	  --select * from #dPerson
 
-	  select PostPropose.* from PostPropose join #dPerson t1 on PostPropose.proffessionalId = t1.id
+	  --select PostPropose.* from PostPropose join #dPerson t1 on PostPropose.proffessionalId = t1.id
 
-	  select PostGallery.* from PostGallery join #postTable t1 on t1.id = PostGallery.postId
+	  --select PostGallery.* from PostGallery join #postTable t1 on t1.id = PostGallery.postId
 
  END
  GO
@@ -312,24 +363,44 @@ GO
 
 ---------------------------------
 
-
- CREATE PROCEDURE GetReviews
+ CREATE PROCEDURE getReviews
  @id INT
  AS
  BEGIN
       
-      select ProfessionalReview.id,ProfessionalReview.review,ProfessionalReview.reviewDate,Person.uname,PersonImage.pImage into #reviewTable 
-	  from ProfessionalReview left JOIN Person 
-	  ON ProfessionalReview.reviewer = Person.id left JOIN PersonImage on Person.id=PersonImage.personId
+      select *
+	  from ProfessionalReview 
 	  WHERE ProfessionalReview.ProfessionalId=@id 
 	  
-	  update #reviewTable set personImage = '' where personImage IS NULL
-	  select * from #reviewTable 
+	  --update #reviewTable set personImage = '' where personImage IS NULL
+	  --select * from #reviewTable 
 
 	
  END
  GO
 
-DROP Procedure GetReviews
+DROP Procedure getReviews
 GO
-exec GetReviews 1
+exec getReviews 1
+
+
+---------------------------------
+
+
+ CREATE PROCEDURE getDPeople
+ @List NVARCHAR(MAX)
+ AS
+ BEGIN
+      
+	select Person.*, PersonImage.pImage
+	from Person left JOIN PersonImage 
+	ON Person.id = PersonImage.personId 
+	WHERE Person.id IN( SELECT id = Item FROM SplitInts(@List, ',')); 
+
+ END
+ GO
+
+DROP Procedure getDPeople
+GO
+
+exec getDPeople '1,2'

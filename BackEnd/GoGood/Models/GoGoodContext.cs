@@ -68,7 +68,7 @@ namespace GoGood.Models
 
                 entity.Property(e => e.PersonId).HasColumnName("personId");
 
-                entity.Property(e => e.PersonImage1).HasColumnName("personImage");
+                entity.Property(e => e.pImage).HasColumnName("pImage");
             });
 
             modelBuilder.Entity<Post>(entity =>

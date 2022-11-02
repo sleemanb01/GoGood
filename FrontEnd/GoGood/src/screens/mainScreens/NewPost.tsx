@@ -18,22 +18,23 @@ import {
 import {PrimaryButton} from '../../components/Buttons/PrimaryButton';
 import {imageStyles, loginStyles} from '../../styles/STYLES';
 import {_FONTS} from '../../styles/_FONTS';
-import {IField} from '../../interfaces/Upload/IField';
 import useAsyncStorage from '@react-native-async-storage/async-storage';
 import {getFields, postPost} from '../../util/axios';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {newPostStyles} from '../../styles/STYLES';
 import {RootStackParamList} from '../../types/RootStackParamList';
-import {ImagePickerModal} from '../../components/ImagePickerModal';
 import {Asset} from 'react-native-image-picker';
 import {MiniProfile} from '../../components/Profile/MiniProfile';
-import {Dropdown} from '../../components/DropDown';
-import {IPost} from '../../interfaces/Upload/IPost';
+import {Dropdown} from '../../components/util/DropDown';
 import {nonEmpty} from '../../util/validation';
-import {IPersonWFields} from '../../interfaces/Download/IPersonWFields';
-import {IDPerson} from '../../interfaces/Download/IDPerson';
-import {IPostWGallery} from '../../interfaces/Upload/IPostWGallery';
-import {IPostGallery} from '../../interfaces/Upload/IPostGallery';
+import {
+  IPersonWFields,
+  IDPerson,
+  IPostWGallery,
+} from '../../interfaces/download';
+import {IField, IPost, IPostGallery} from '../../interfaces/upload';
+import {ImagePickerModal} from '../../components/util/ImagePickerModal';
+import {stringToBuffer} from '../../util/dataHandler';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'NewPost'>;
 
@@ -102,7 +103,9 @@ export function NewPost({route, navigation}: Props) {
 
       let gallery: IPostGallery[] = [];
       uriis.map(curr => {
-        let tmp: IPostGallery = {gallery: curr.base64 as string};
+        let tmp: IPostGallery = {
+          gallery: stringToBuffer(curr.base64 as string),
+        };
         gallery.push(tmp);
       });
       let pwg: IPostWGallery = {
