@@ -1,4 +1,4 @@
-﻿USE master
+﻿--USE master
 GO
 
 IF EXISTS (
@@ -80,6 +80,7 @@ CREATE TABLE Person(
 	id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	uname nvarchar(50),
 	phone nvarchar(15),
+	isAngel Bit,
 )
 
 ----------------------------------------------------------
@@ -192,19 +193,19 @@ INSERT INTO Field VALUES
 --(6, 4);
 
 
-select * from PersonImage
+--select * from PersonImage
 
-select * from Person
+--select * from Person
 
 --select * from Field
 
---select * from Post
+select * from Post
 
 --select * from PostGallery
 
 --select * from ProfessionalInfo
 
-select * from ProfessionalField
+--select * from ProfessionalField
 
 --select * from ProfessionalReview
 

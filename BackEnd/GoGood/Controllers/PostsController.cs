@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GoGood.Models;
+using System.Text;
 
 namespace GoGood.Controllers
 {
@@ -31,12 +32,12 @@ namespace GoGood.Controllers
 
             try
             {
-                Post tmp = new Post();
+                Post post = new Post();
 
-                tmp = postWGallery.post;
-                tmp.IsDelete = 0;
-                tmp.PostStatus = 0;
-                _context.Posts.Add(tmp);
+                post = postWGallery.post;
+                post.IsDelete = 0;
+                post.PostStatus = 0;
+                _context.Posts.Add(post);
 
                 await _context.SaveChangesAsync();
 
@@ -47,9 +48,27 @@ namespace GoGood.Controllers
                     return NotFound();
                 }
 
-                if (postWGallery.PostGallery.Count > 0)
+                var uploadedPost = (Post)res.Value;
+
+                if (postWGallery.DPostGallery.Count > 0)
                 {
-                    _context.PostGalleries.AddRange(postWGallery.PostGallery);
+                    var data = postWGallery.DPostGallery;
+                    var byteArr = new List<PostGallery>();
+
+                    for (var i = 0; i < data.Count; i++)
+                    {
+                        var element = data.ElementAt(i).DGallery;
+                        if (element != null)
+                        {
+                            PostGallery pg = new PostGallery();
+                            pg.Gallery = Encoding.ASCII.GetBytes(element);
+                            pg.PostId = uploadedPost.Id;
+                            byteArr.Add(pg);
+                        }
+
+                    }
+
+                    _context.PostGalleries.AddRange(byteArr);
                     var galleryRes = await _context.SaveChangesAsync();
                 }
 
@@ -133,7 +152,7 @@ namespace GoGood.Controllers
             }
             var PostProposes = Procs.getProposes(postIds);
 
-            var PostGallery = Procs.getGallery(postIds);
+            var DPostGallery = Procs.getGallery(postIds);
 
             var proIds = "";
             foreach (var p in PostProposes)
@@ -146,7 +165,7 @@ namespace GoGood.Controllers
             pwd.posts = posts;
             pwd.professionalProposers = professionalProposers;
             pwd.PostProposes = PostProposes;
-            pwd.PostGallery = PostGallery;
+            pwd.DPostGallery = DPostGallery;
 
             return pwd;
         }

@@ -135,7 +135,8 @@ CREATE PROCEDURE getFieldsByPersonId
 
 as
 begin
-		select ProfessionalField.* from Field
+
+		select Field.* from Field
 		inner join ProfessionalField on 
 		ProfessionalField.fieldId = Field.id
 		where ProfessionalField.personId = @personId
@@ -160,7 +161,7 @@ begin
 	if @temp is null
 		begin
 			INSERT INTO Person VALUES 
-			(@uname, @phone)
+			(@uname, @phone,null)
 			set @temp = (select id from Person where @phone = phone)
 		end
 	else
@@ -280,7 +281,7 @@ Begin
 
 	  select * from #postTable
 
-	  select Person.id, Person.uname, Person.phone, PersonImage.pImage into #dPerson
+	  select Person.id, Person.uname, Person.phone, PersonImage.pImage
 	  from Person
 	  join #postTable t1 
 	  on t1.proffessionalId = Person.id 
@@ -289,11 +290,11 @@ Begin
 
 	  --update #dPerson set personImage = 0 where personImage IS NULL
 
-	  select * from #dPerson
+	  --select * from #dPerson
 
-	  select PostPropose.* from PostPropose join #dPerson t1 on PostPropose.proffessionalId = t1.id
+	  --select PostPropose.* from PostPropose join #dPerson t1 on PostPropose.proffessionalId = t1.id
 
-	  select PostGallery.* from PostGallery join #postTable t1 on t1.id = PostGallery.postId
+	  --select PostGallery.* from PostGallery join #postTable t1 on t1.id = PostGallery.postId
 end
 GO
 
@@ -310,20 +311,20 @@ GO
  AS
  BEGIN
       
-      select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId, Field.fieldName into #postTable 
+      select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId, Field.fieldName
 	  from Post left JOIN Field 
 	  ON Field.id = Post.fieldId 
 	  WHERE Post.isDelete = 0 AND Post.postStatus !=3 AND
 	  fieldId IN( SELECT fieldId = Item FROM SplitInts(@List, ',')); 
 
-	  select * from #postTable
+	  --select * from #postTable
 
-	  select Person.id, Person.uname, Person.phone, PersonImage.pImage into #dPerson
-	  from Person
-	  join #postTable t1
-	  on t1.proffessionalId = Person.id
-	  left join PersonImage
-	  on Person.id = PersonImage.personId
+	  --select Person.id, Person.uname, Person.phone, PersonImage.pImage into #dPerson
+	  --from Person
+	  --join #postTable t1
+	  --on t1.proffessionalId = Person.id
+	  --left join PersonImage
+	  --on Person.id = PersonImage.personId
 
 
 	  --update #dPerson set personImage = 0 where personImage IS NULL
@@ -337,7 +338,7 @@ GO
  END
  GO
 
- exec GetPostsByFields '3,4,0'
+ exec GetPostsByFields '3,0'
 
 DROP Procedure GetPostsByFields
 GO

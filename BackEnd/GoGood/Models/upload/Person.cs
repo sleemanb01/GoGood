@@ -8,5 +8,6 @@ namespace GoGood.Models
         public int Id { get; set; }
         public string? Uname { get; set; }
         public string? Phone { get; set; }
+        public Boolean? IsAngel { get; set; }
     }
 }

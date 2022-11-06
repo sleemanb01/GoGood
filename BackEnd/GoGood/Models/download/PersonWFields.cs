@@ -7,7 +7,7 @@ namespace GoGood.Models
     {
         public DPerson DPerson { get; set; } = new DPerson();
 
-        public ICollection<ProfessionalField>? professionalFields { get; set; }
+        public ICollection<Field>? fields { get; set; }
 
     }
 }

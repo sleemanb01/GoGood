@@ -9,6 +9,7 @@ export interface IPerson {
   id?: number;
   uname: string;
   phone: string;
+  isAngel: boolean | null;
 }
 
 export interface IPost {
@@ -24,11 +25,11 @@ export interface IPost {
   postStatus?: number;
 }
 
-export interface IPostGallery {
-  id?: number;
-  postId?: number;
-  gallery?: ArrayBuffer;
-}
+// export interface IPostGallery {
+//   id?: number;
+//   postId?: number;
+//   gallery?: string[];
+// }
 
 export interface IPostPropose {
   id?: number;

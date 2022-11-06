@@ -32,7 +32,7 @@ export function Post({
     dist = getDistanceInMeter(post.post.postLat, post.post.postLng, position);
   }
 
-  const isAngel = user.professionalFields.length > 1;
+  const isAngel = user.fields.length > 0;
 
   const calcStatus = (): PSTATUS => {
     switch (post.post.postStatus) {

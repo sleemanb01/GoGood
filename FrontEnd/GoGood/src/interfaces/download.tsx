@@ -2,7 +2,6 @@ import {
   IField,
   IPerson,
   IPost,
-  IPostGallery,
   IPostPropose,
   IProfessionalField,
   IProfessionalReview,
@@ -10,12 +9,18 @@ import {
 
 export interface IDPerson {
   person: IPerson;
-  pImage: ArrayBuffer | null;
+  pImage?: string;
+}
+
+export interface IDPostGallery {
+  id?: number;
+  postId?: number;
+  dGallery: string;
 }
 
 export interface IPostWGallery {
   post: IPost;
-  postGallery?: IPostGallery[];
+  dPostGallery?: IDPostGallery[];
 }
 
 export interface ReviewWithPerson {
@@ -25,12 +30,12 @@ export interface ReviewWithPerson {
 
 export interface IPersonWFields {
   dPerson: IDPerson | null;
-  professionalFields: IField[];
+  fields: IField[];
 }
 
 export interface IPostWData {
   posts: IPost[];
   professionalProposers?: IDPerson[];
   postProposes?: IPostPropose[];
-  postGallery?: IPostGallery[];
+  dPostGallery?: IDPostGallery[];
 }

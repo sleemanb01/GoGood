@@ -12,7 +12,7 @@ export function Feed({
   currPosition: ILocation | null | undefined;
   user: IPersonWFields;
 }) {
-  let params: string = prepareDataByFields(user.professionalFields);
+  let params: string = prepareDataByFields(user.fields, user);
 
   return (
     <React.Fragment>
@@ -26,27 +26,27 @@ export function Feed({
   );
 }
 
-const prepareDataByFields = (fields: IField[]): string => {
+const prepareDataByFields = (
+  fields: IField[],
+  user: IPersonWFields,
+): string => {
   let arr: number[] = [];
+
+  if (!user.dPerson?.person.isAngel) {
+    return '0';
+  }
 
   fields.map((curr: IField) => {
     arr = [...arr, curr.id];
   });
 
   let dataString = '';
-  let isGeneral = false;
+  dataString += '0,';
   arr.map((curr: number) => {
     dataString += curr + ',';
-    if (curr === 0) {
-      isGeneral = true;
-    }
   });
 
-  if (!isGeneral) {
-    dataString += '0';
-  } else {
-    dataString.slice(0, -1);
-  }
+  dataString.slice(0, -1);
 
   return dataString;
 };

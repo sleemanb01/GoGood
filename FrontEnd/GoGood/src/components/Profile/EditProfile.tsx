@@ -90,7 +90,7 @@ export function EditProfile() {
           uname: user.person.uname,
           phone: user.person.phone,
         },
-        pImage: getBytes(urii[0].base64 as string),
+        pImage: urii[0].base64 as string,
       };
 
       // base64ToHex(urii[0].base64 as string);

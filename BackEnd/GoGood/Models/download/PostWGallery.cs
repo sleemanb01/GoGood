@@ -7,7 +7,7 @@ namespace GoGood.Models
     {
         public Post post { get; set; } = new Post();
 
-        public ICollection<PostGallery> PostGallery { get; set; } = new List<PostGallery>();
+        public ICollection<DPostGallery> DPostGallery { get; set; } = new List<DPostGallery>();
 
     }
 }

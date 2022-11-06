@@ -6,7 +6,7 @@ import {IField, IProfessionalField} from '../interfaces/upload';
 
 const initialValue = {
   dPerson: null,
-  professionalFields: [],
+  fields: [],
 };
 
 export const AuthContext = createContext<ICtx>({
@@ -18,7 +18,7 @@ export const AuthContext = createContext<ICtx>({
   logout: () => {},
 });
 
-export function AuthContextProvider({children}: {children: any}) {
+export function AuthContextProvider({children}: {children: JSX.Element}) {
   const [auth, setAuth] = useState<IPersonWFields>(initialValue);
 
   async function authenticate(user: IPersonWFields) {
@@ -29,7 +29,7 @@ export function AuthContextProvider({children}: {children: any}) {
   async function updateFields(fields: IField[]) {
     let tmp: IPersonWFields = {
       dPerson: auth.dPerson,
-      professionalFields: fields,
+      fields: fields,
     };
     await AsyncStorage.setItem('user', JSON.stringify(tmp));
     setAuth(tmp);
@@ -38,10 +38,9 @@ export function AuthContextProvider({children}: {children: any}) {
   async function updatePerson(dPerson: IDPerson) {
     let tmp: IPersonWFields = {
       dPerson: dPerson,
-      professionalFields: auth.professionalFields,
+      fields: auth.fields,
     };
     await AsyncStorage.setItem('user', JSON.stringify(tmp));
-    // console.log(dPerson.pImage);
 
     setAuth(tmp);
   }
@@ -52,7 +51,7 @@ export function AuthContextProvider({children}: {children: any}) {
   }
 
   const value: ICtx = {
-    isAuthenticated: !!auth.dPerson && auth.professionalFields.length > 0,
+    isAuthenticated: !!auth.dPerson && !!auth.dPerson.person.isAngel,
     userWField: auth,
     authenticate: authenticate,
     updateFields: updateFields,

@@ -11,7 +11,7 @@ namespace GoGood.Models
 
         public ICollection<PostPropose> PostProposes { get; set; } = new List<PostPropose>();
 
-        public ICollection<PostGallery> PostGallery { get; set; } = new List<PostGallery>();
+        public ICollection<DPostGallery> DPostGallery { get; set; } = new List<DPostGallery>();
 
     }
 }

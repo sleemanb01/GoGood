@@ -31,10 +31,10 @@ import {
   IPersonWFields,
   IDPerson,
   IPostWGallery,
+  IDPostGallery,
 } from '../../interfaces/download';
-import {IField, IPost, IPostGallery} from '../../interfaces/upload';
+import {IField, IPost} from '../../interfaces/upload';
 import {ImagePickerModal} from '../../components/util/ImagePickerModal';
-import {stringToBuffer} from '../../util/dataHandler';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'NewPost'>;
 
@@ -101,16 +101,16 @@ export function NewPost({route, navigation}: Props) {
         fieldId: selected.id,
       };
 
-      let gallery: IPostGallery[] = [];
+      let dGallery: IDPostGallery[] = [];
       uriis.map(curr => {
-        let tmp: IPostGallery = {
-          gallery: stringToBuffer(curr.base64 as string),
+        let tmp: IDPostGallery = {
+          dGallery: curr.base64 as string,
         };
-        gallery.push(tmp);
+        dGallery.push(tmp);
       });
       let pwg: IPostWGallery = {
         post: postToPost,
-        postGallery: gallery,
+        dPostGallery: dGallery,
       };
       postPost(pwg, navigation, setSuccess);
     }

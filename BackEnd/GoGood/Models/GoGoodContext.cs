@@ -60,6 +60,10 @@ namespace GoGood.Models
                 entity.Property(e => e.Uname)
                     .HasMaxLength(50)
                     .HasColumnName("uname");
+
+                entity.Property(e => e.IsAngel)
+                    .HasMaxLength(50)
+                    .HasColumnName("isAngel");
             });
 
             modelBuilder.Entity<PersonImage>(entity =>

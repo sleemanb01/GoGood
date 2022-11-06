@@ -29,6 +29,15 @@ namespace GoGood
                         tmp.Id = dr.GetInt32(0);
                         tmp.Uname = dr.GetString(1);
                         tmp.Phone = dr.GetString(2);
+                        var isAngel = dr.GetValue(3);
+                        if (!DBNull.Value.Equals(isAngel))
+                        {
+                            tmp.IsAngel = Convert.ToBoolean(dr.GetInt32(3));
+                        }
+                        else
+                        {
+                            tmp.IsAngel = null;
+                        }
 
                         dPerson.person = tmp;
 
@@ -50,10 +59,10 @@ namespace GoGood
             }
         }
 
-        public static List<ProfessionalField> getFieldsByPersonId(int id)
+        public static List<Field> getFieldsByPersonId(int id)
         {
 
-            var pf = new List<ProfessionalField>();
+            var pf = new List<Field>();
 
             using (SqlConnection con = new SqlConnection(conStr))
             {
@@ -66,11 +75,9 @@ namespace GoGood
 
                     while (dr.Read())
                     {
-                        var tmp = new ProfessionalField();
+                        var tmp = new Field();
                         tmp.Id = dr.GetInt32(0);
-                        tmp.PersonId = dr.GetInt32(1);
-                        tmp.FieldId = dr.GetInt32(2);
-
+                        tmp.FieldName = dr.GetString(1);
                         pf.Add(tmp);
                     }
 
@@ -108,6 +115,15 @@ namespace GoGood
                         tmp.Id = dr.GetInt32(0);
                         tmp.Uname = dr.GetString(1);
                         tmp.Phone = dr.GetString(2);
+                        var isAngel = dr.GetValue(3);
+                        if (!DBNull.Value.Equals(isAngel))
+                        {
+                            tmp.IsAngel = Convert.ToBoolean(dr.GetInt32(3));
+                        }
+                        else
+                        {
+                            tmp.IsAngel = null;
+                        }
 
                         dp.person = tmp;
                         var image = dr.GetValue(3);
@@ -179,6 +195,15 @@ namespace GoGood
                         tmp.Id = dr.GetInt32(0);
                         tmp.Uname = dr.GetString(1);
                         tmp.Phone = dr.GetString(2);
+                        var isAngel = dr.GetValue(3);
+                        if (!DBNull.Value.Equals(isAngel))
+                        {
+                            tmp.IsAngel = Convert.ToBoolean(dr.GetInt32(3));
+                        }
+                        else
+                        {
+                            tmp.IsAngel = null;
+                        }
 
                         dp.person = tmp;
                         var image = dr.GetValue(3);
@@ -277,9 +302,9 @@ namespace GoGood
             }
         }
 
-        public static ICollection<PostGallery> getGallery(string postIds)
+        public static ICollection<DPostGallery> getGallery(string postIds)
         {
-            var galleries = new List<PostGallery>();
+            var galleries = new List<DPostGallery>();
 
             using (SqlConnection con = new SqlConnection(conStr))
             {
@@ -292,17 +317,17 @@ namespace GoGood
 
                     while (dr.Read())
                     {
-                        var gallery = new PostGallery();
+                        var gallery = new DPostGallery();
                         gallery.Id = dr.GetInt32(0);
                         gallery.PostId = dr.GetInt32(1);
                         var tmp = dr.GetValue(2);
                         if (!DBNull.Value.Equals(tmp))
                         {
-                            gallery.Gallery = (byte[])tmp;
+                            gallery.DGallery = Encoding.UTF8.GetString((byte[])tmp);
                         }
                         else
                         {
-                            gallery.Gallery = null;
+                            gallery.DGallery = null;
                         }
 
                         galleries.Add(gallery);

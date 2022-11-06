@@ -23,7 +23,7 @@ export const getPosts = async (
   if (param.length > 0) {
     try {
       const result = await axios.get(url + controller + param);
-      const finalData = await adjustPostData(result.data);
+      const finalData = adjustPostData(result.data);
       setIsLoading(false);
       setPosts(finalData);
     } catch (err) {
@@ -41,7 +41,7 @@ export const postPost = async (
   try {
     const controller = 'Posts/postPostWGallery';
     const result = await axios.post(url + controller, post);
-    if (result.status === 204) {
+    if (result.status === 200) {
       setSuccess(true);
     }
   } catch (err) {
@@ -93,11 +93,11 @@ export const signInUp = async (
   try {
     const result = await axios.post(url + controller, person);
 
-    (async () => {
-      console.log(result.data);
-
-      authCtx.authenticate(result.data as IPersonWFields);
-    })();
+    if (result.status === 200) {
+      (async () => {
+        authCtx.authenticate(result.data as IPersonWFields);
+      })();
+    }
   } catch (err) {
     console.log(err);
     navigation.navigate('ErrorScreen');
@@ -107,22 +107,25 @@ export const signInUp = async (
 export async function updatePerson(
   user: IDPerson,
   authCtx: ICtx,
-  setSuccess: Function,
+  setSuccess: Function | null,
 ) {
   try {
     const controller = 'Persons/putDPerson';
     const result = await axios.post(url + controller, user);
 
-    (async () => {
-      authCtx.updatePerson(result.data as IDPerson);
-    })();
-
     if (result.status === 200) {
-      setSuccess(2);
+      (async () => {
+        authCtx.updatePerson(result.data as IDPerson);
+      })();
+      if (setSuccess) {
+        setSuccess(2);
+      }
     }
   } catch (err) {
     console.log(err);
-    setSuccess(3);
+    if (setSuccess) {
+      setSuccess(3);
+    }
   }
 }
 

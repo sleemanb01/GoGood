@@ -10,9 +10,10 @@ import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../../hooks/userCtx';
 import {useTranslation} from 'react-i18next';
 import {PrimaryButton} from '../../components/Buttons/PrimaryButton';
-import {IField} from '../../interfaces/upload';
-import {getFields} from '../../util/axios';
+import {IField, IPerson} from '../../interfaces/upload';
+import {getFields, updatePerson} from '../../util/axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {IDPerson} from '../../interfaces/download';
 
 export function WhatRYou() {
   const {t} = useTranslation();
@@ -23,6 +24,9 @@ export function WhatRYou() {
 
   const [isAngel, setIsAngel] = useState(false);
   const [fields, setFields] = useState<IField[]>([]);
+  // const [success, setSuccess] = useState(true);
+
+  // console.log(authCtx);
 
   useEffect(() => {
     getFields(setFields, navigation);
@@ -40,11 +44,20 @@ export function WhatRYou() {
     setIsAngel(isAngel);
   };
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     if (isAngel) {
       navigation.navigate('Categories', {fields: fields});
     } else {
-      authCtx.updateFields([{id: 1, fieldName: 'none'}]);
+      let person: IPerson = {
+        uname: authCtx.userWField.dPerson?.person.uname as string,
+        phone: authCtx.userWField.dPerson?.person.phone as string,
+        isAngel: isAngel,
+      };
+      let dP: IDPerson = {
+        person: person,
+        pImage: authCtx.userWField.dPerson?.pImage,
+      };
+      updatePerson(dP, authCtx, null);
     }
   };
 

@@ -41,10 +41,10 @@ namespace GoGood.Controllers
 
                 pwf.DPerson = dPerson;
 
-                var pf = new List<ProfessionalField>();
+                var pf = new List<Field>();
                 pf = Procs.getFieldsByPersonId(dPerson.person.Id);
 
-                pwf.professionalFields = pf;
+                pwf.fields = pf;
 
                 return pwf;
             }

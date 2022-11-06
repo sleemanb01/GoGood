@@ -31,8 +31,10 @@ export function Categories({route, navigation}: Props) {
   const personId = authCtx.userWField.dPerson?.person.id;
 
   if (success) {
-    authCtx.updateFields(getChoosenFields(selectedFields, personId));
+    authCtx.updateFields(getChoosenFields(selectedFields));
   }
+
+  console.log(authCtx.userWField);
 
   useEffect(() => {
     setSelectedFields(addSelection(fields as IField[]));
@@ -92,10 +94,7 @@ export function Categories({route, navigation}: Props) {
   );
 }
 
-function getChoosenFields(
-  selectedFields: ISelectField[],
-  personId: number | undefined,
-): IField[] {
+function getChoosenFields(selectedFields: ISelectField[]): IField[] {
   let pf: IField[] = [];
   pf = [
     ...pf,

@@ -41,7 +41,7 @@ export function Main() {
             name={t('feed')}
             children={() => <Feed user={user} currPosition={position} />}
           />
-          {authCtx.userWField.professionalFields.length > 1 ? (
+          {authCtx.userWField.dPerson?.person.isAngel ? (
             <Tab.Screen
               name={t('myMissions')}
               children={() => (

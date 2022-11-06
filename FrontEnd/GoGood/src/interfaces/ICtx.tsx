@@ -5,7 +5,7 @@ export interface ICtx {
   isAuthenticated: boolean;
   userWField: IPersonWFields;
   authenticate: (user: IPersonWFields) => void;
-  updateFields: (fields: IField[]) => void;
+  updateFields: (ProfessionalFields: IField[]) => void;
   updatePerson: (dPerson: IDPerson) => void;
   logout: () => void;
 }

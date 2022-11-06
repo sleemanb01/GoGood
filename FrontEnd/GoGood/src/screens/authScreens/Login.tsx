@@ -61,7 +61,7 @@ export function Login() {
         (phoneInputRef.current as unknown as TextInput).focus();
       }
     } else {
-      signInUp({uname: name, phone: phone}, navigation, authCtx);
+      signInUp({uname: name, phone: phone, isAngel: null}, navigation, authCtx);
     }
   }
 

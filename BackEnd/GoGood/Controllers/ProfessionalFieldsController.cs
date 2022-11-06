@@ -45,6 +45,9 @@ namespace GoGood.Controllers
                 _context.ProfessionalFields.AddRange(professionalFields);
 
                 await _context.SaveChangesAsync();
+
+                var personId = professionalFields[0].PersonId;
+                
             }
             catch (Exception e)
             {
