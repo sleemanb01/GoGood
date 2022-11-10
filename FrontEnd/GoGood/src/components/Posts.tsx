@@ -9,14 +9,23 @@ import React, {
 } from 'react';
 import {FlatList} from 'react-native';
 import {AuthContext} from '../hooks/userCtx';
-import {IDisplayPost} from '../interfaces/view';
 import {ILocation} from '../interfaces/ILocation';
 import {LoadingScreen} from '../screens/utilScreens/LoadingScreen';
 import {RootStackParamList} from '../types/RootStackParamList';
-import {getFields, getPosts} from '../util/axios';
+import {getPosts} from '../util/axios';
 import {Post} from './Post';
 import {IField} from '../interfaces/upload';
-import useAsyncStorage from '@react-native-async-storage/async-storage';
+import {IPostsWData} from '../interfaces/download';
+import {adjustPostData} from '../util/dataHandler';
+import {getFields} from '../util/localStorage';
+import {ErrorScreen} from '../screens/utilScreens/ErrorScreen';
+
+const initialValue: IPostsWData = {
+  posts: [],
+  professionalProposers: [],
+  postProposes: [],
+  dPostGallery: [],
+};
 
 function Posts({
   params,
@@ -29,35 +38,33 @@ function Posts({
 }) {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const [isLoading, setIsLoading] = useState(true);
-  const [posts, setPosts] = useState<IDisplayPost[]>([]);
+  const [posts, setPosts] = useState<IPostsWData | null>(initialValue);
   const [fields, setFields] = useState<IField[]>([]);
   const authCtx = useContext(AuthContext);
 
   useLayoutEffect(() => {
-    (async () => {
-      const tmp = await useAsyncStorage.getItem('fields');
-      if (tmp) {
-        setFields(JSON.parse(tmp));
-      } else {
-        getFields(setFields, navigation);
-      }
-    })();
+    getFields(setFields);
   }, []);
 
   useEffect(() => {
-    getPosts(params, setPosts, navigation, setIsLoading, controller);
+    getPosts(params, setPosts, controller);
   }, []);
 
-  if (isLoading) {
-    return <LoadingScreen />;
+  if (posts === null || fields === null) {
+    // navigation.navigate('ErrorScreen');
+    return <ErrorScreen />;
   }
+  // } else if (posts.posts.length === 0) {
+  //   return <LoadingScreen />;
+  // }
+
+  let displayPosts = adjustPostData(posts as IPostsWData);
 
   //remove my posts
 
   return (
     <FlatList
-      data={posts}
+      data={displayPosts}
       renderItem={itemData => (
         <Post
           field={

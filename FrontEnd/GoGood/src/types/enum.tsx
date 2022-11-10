@@ -5,29 +5,12 @@ export enum USTATUS { //upload status
   FAILED,
 }
 
-export enum PSTATUS { // post status
-  PENDING,
-  WAITINGFORANGEL,
-  WAITINGFORDATE,
-  ISDATEOK,
-  INHANDLE,
+export enum PSTATUS {
   HANDLED,
-  PROPOSE, // ANGEL STATUS
-  SETDATE,
-  CHOOSEANOTHERDATE,
+  PENDING,
+  ACCEPT_HELP,
+  WAITING_FOR_DATE,
+  IS_DATE_OK,
+  CHOOSE_ANOTHER_DATE,
+  IN_HANDLE,
 }
-
-// export enum PSTATUS { // post status
-//   PENDING,
-//   ANGELHANDLE,
-//   ANGELTHANKED,
-//   ACCEPTHELP,
-//   SAYTHANKS,
-//   HANDLED,
-// }
-
-// 1 - isAngel | !isAngel, 0  => propse help ***
-// 2 - isAngel, 2 => cancel | set
-// 3 - isAngel, 3 => read comment
-// 4 - !isAngel, 2 => accept
-// 5 - !isAngel, 3 => say thanks

@@ -6,7 +6,7 @@ import {IField} from '../interfaces/upload';
 export type RootStackParamList = {
   Login: undefined;
   WhatRYou: undefined;
-  Categories: {fields: IField[]} | undefined;
+  Categories: undefined;
   Main: undefined;
   ErrorScreen: undefined;
   LoadingScreen: undefined;

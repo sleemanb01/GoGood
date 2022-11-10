@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, Image} from 'react-native';
-import {IPostGallery} from '../../interfaces/upload';
+import {IDPostGallery} from '../../interfaces/download';
 import {imageStyles} from '../../styles/STYLES';
 
-export function ImageView({gallery}: {gallery: IPostGallery[] | undefined}) {
+export function ImageView({gallery}: {gallery: IDPostGallery[] | undefined}) {
   if (gallery === undefined) {
     return <React.Fragment></React.Fragment>;
   }
@@ -35,7 +35,7 @@ export function ImageView({gallery}: {gallery: IPostGallery[] | undefined}) {
         alignItems: 'stretch',
         flexDirection: 'row',
       }}>
-      {gallery.map((curr, i) => displayImage(curr.gallery as string, i))}
+      {gallery.map((curr, i) => displayImage(curr.dGallery as string, i))}
     </View>
   );
 }

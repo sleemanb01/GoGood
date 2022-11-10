@@ -4,7 +4,6 @@ import {
   Image,
   Text,
   TextInput,
-  Pressable,
   NativeSyntheticEvent,
   TextInputChangeEventData,
   GestureResponderEvent,
@@ -25,6 +24,7 @@ import {signInUp} from '../../util/axios';
 import {RootStackParamList} from '../../types/RootStackParamList';
 import {PrimaryButton} from '../../components/Buttons/PrimaryButton';
 import {nonEmpty, phoneValidate} from '../../util/validation';
+import {IPersonWFields} from '../../interfaces/download';
 
 export function Login() {
   const {t} = useTranslation();
@@ -32,10 +32,20 @@ export function Login() {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const authCtx = useContext(AuthContext);
 
+  const [user, setUser] = useState<IPersonWFields | null>(authCtx.userWField);
   const nameInputRef = useRef<TextInput | null>(null);
   const phoneInputRef = useRef<TextInput | null>(null);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+
+  if (user === null) {
+    // return <ErrorScreen />;
+    navigation.navigate('ErrorScreen');
+  } else if (user.dPerson !== null) {
+    (async () => {
+      authCtx.authenticate(user);
+    })();
+  }
 
   const nameChangeHandler = (
     event: NativeSyntheticEvent<TextInputChangeEventData>,
@@ -61,7 +71,7 @@ export function Login() {
         (phoneInputRef.current as unknown as TextInput).focus();
       }
     } else {
-      signInUp({uname: name, phone: phone, isAngel: null}, navigation, authCtx);
+      signInUp({uname: name, phone: phone, isAngel: null}, setUser);
     }
   }
 

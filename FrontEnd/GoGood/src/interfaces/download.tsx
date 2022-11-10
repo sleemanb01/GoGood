@@ -3,7 +3,6 @@ import {
   IPerson,
   IPost,
   IPostPropose,
-  IProfessionalField,
   IProfessionalReview,
 } from './upload';
 
@@ -20,7 +19,7 @@ export interface IDPostGallery {
 
 export interface IPostWGallery {
   post: IPost;
-  dPostGallery?: IDPostGallery[];
+  dPostGallery: IDPostGallery[];
 }
 
 export interface ReviewWithPerson {
@@ -33,7 +32,7 @@ export interface IPersonWFields {
   fields: IField[];
 }
 
-export interface IPostWData {
+export interface IPostsWData {
   posts: IPost[];
   professionalProposers?: IDPerson[];
   postProposes?: IPostPropose[];

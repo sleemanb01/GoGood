@@ -7,6 +7,7 @@ namespace GoGood.Models
     {
         public int Id { get; set; }
         public int? ProfessionalId { get; set; }
+        public int? PostId { get; set; }
         public int? ReviewerId { get; set; }
         public DateTime? ReviewDate { get; set; }
         public string? Review { get; set; }

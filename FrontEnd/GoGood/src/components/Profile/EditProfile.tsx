@@ -11,6 +11,7 @@ import {
 import {Asset} from 'react-native-image-picker';
 import {AuthContext} from '../../hooks/userCtx';
 import {IDPerson} from '../../interfaces/download';
+import {IPerson} from '../../interfaces/upload';
 import {
   imageStyles,
   commonStyles,
@@ -18,7 +19,6 @@ import {
 } from '../../styles/STYLES';
 import {USTATUS} from '../../types/enum';
 import {updatePerson} from '../../util/axios';
-import {base64ToHex, getBytes} from '../../util/dataHandler';
 import {nonEmpty, phoneValidate} from '../../util/validation';
 import {ImagePickerModal} from '../util/ImagePickerModal';
 
@@ -40,6 +40,20 @@ export function EditProfile() {
   const [isPhoneUpdate, setIsPHoneUpdate] = useState<USTATUS>(0);
   const [isImageUpdate, setIsImageUpdate] = useState<USTATUS>(0);
 
+  useEffect(() => {
+    if (isNameUpdate === 2 || isPhoneUpdate === 2 || isImageUpdate === 2) {
+      let p: IPerson = {
+        uname: name,
+        phone: phone,
+        isAngel: user.person.isAngel,
+      };
+      let dp: IDPerson = {person: p, pImage: urii[0].base64};
+      (async () => {
+        authCtx.updatePerson(dp);
+      })();
+    }
+  }, [isNameUpdate, isPhoneUpdate, isImageUpdate]);
+
   const nameChangeHandler = (
     event: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
@@ -60,10 +74,15 @@ export function EditProfile() {
     } else {
       setIsNameUpdate(1);
       let dPerson: IDPerson = {
-        person: {id: user.person.id, uname: name, phone: user.person.phone},
+        person: {
+          id: user.person.id,
+          uname: name,
+          phone: user.person.phone,
+          isAngel: user.person.isAngel,
+        },
         pImage: user.pImage,
       };
-      updatePerson(dPerson, authCtx, setIsNameUpdate);
+      updatePerson(dPerson, setIsNameUpdate);
     }
   };
   const updatePhone = () => {
@@ -74,10 +93,15 @@ export function EditProfile() {
     } else {
       setIsPHoneUpdate(1);
       let dPerson: IDPerson = {
-        person: {id: user.person.id, uname: user.person.uname, phone: phone},
+        person: {
+          id: user.person.id,
+          uname: user.person.uname,
+          phone: phone,
+          isAngel: user.person.isAngel,
+        },
         pImage: user.pImage,
       };
-      updatePerson(dPerson, authCtx, setIsPHoneUpdate);
+      updatePerson(dPerson, setIsPHoneUpdate);
     }
   };
 
@@ -89,13 +113,12 @@ export function EditProfile() {
           id: user.person.id,
           uname: user.person.uname,
           phone: user.person.phone,
+          isAngel: user.person.isAngel,
         },
         pImage: urii[0].base64 as string,
       };
 
-      // base64ToHex(urii[0].base64 as string);
-
-      updatePerson(dPerson, authCtx, setIsImageUpdate);
+      updatePerson(dPerson, setIsImageUpdate);
     }
   }, [urii]);
 

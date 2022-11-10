@@ -2,33 +2,37 @@ import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {AuthContext, AuthContextProvider} from './src/hooks/userCtx';
 import useAsyncStorage from '@react-native-async-storage/async-storage';
-import {ICtx} from './src/interfaces/ICtx';
 import {
   AuthenticatedStack,
-  FieldsAuthStack,
+  ChooseStack,
   UserAuthStack,
+  WhatRUStack,
 } from './src/components/util/NavStacks';
 import {LoadingScreen} from './src/screens/utilScreens/LoadingScreen';
 import {handleLang} from './src/util/handleLang';
+import {IPersonWFields} from './src/interfaces/download';
 
-function Navigation({authCtx}: {authCtx: ICtx}) {
+function Navigation({user}: {user: IPersonWFields}) {
   return (
     <NavigationContainer independent={true}>
-      {conditionalRender(authCtx)}
+      {conditionalRender(user)}
     </NavigationContainer>
   );
 }
 
-function conditionalRender(authCtx: ICtx) {
-  if (authCtx.isAuthenticated) {
-    return <AuthenticatedStack />;
-  } else if (authCtx.userWField.dPerson) {
-    return <FieldsAuthStack />;
-  } else {
+function conditionalRender(user: IPersonWFields) {
+  if (user.dPerson === null) {
     return <UserAuthStack />;
+  } else {
+    if (user.dPerson.person.isAngel === null) {
+      return <WhatRUStack />;
+    } else if (user.dPerson.person.isAngel && user.fields.length === 0) {
+      return <ChooseStack />;
+    } else {
+      return <AuthenticatedStack />;
+    }
   }
 }
-
 function Root() {
   const [isLoading, setIsLoading] = useState(true);
   const authCtx = useContext(AuthContext);
@@ -47,7 +51,7 @@ function Root() {
   if (isLoading) {
     <LoadingScreen />;
   }
-  return <Navigation authCtx={authCtx} />;
+  return <Navigation user={authCtx.userWField} />;
 }
 
 export const App = () => {

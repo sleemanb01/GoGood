@@ -1,5 +1,5 @@
 import useAsyncStorage from '@react-native-async-storage/async-storage';
-import {IDPerson, IPostWData} from '../interfaces/download';
+import {IDPerson, IPostsWData} from '../interfaces/download';
 import {IPostPropose, IPost, IField} from '../interfaces/upload';
 import {IDisplayPost} from '../interfaces/view';
 
@@ -19,7 +19,7 @@ const getProfessionals = (
   return professionals;
 };
 
-export const adjustPostData = (dataArr: IPostWData): IDisplayPost[] => {
+export const adjustPostData = (dataArr: IPostsWData): IDisplayPost[] => {
   let finalData: IDisplayPost[] = [];
 
   if (dataArr) {
@@ -33,8 +33,8 @@ export const adjustPostData = (dataArr: IPostWData): IDisplayPost[] => {
         ? getProfessionals(postProposes, dataArr.professionalProposers)
         : [];
 
-      let postGallery = dataArr.postGallery
-        ? dataArr.postGallery.filter(gallery => gallery.postId == curr.id)
+      let postGallery = dataArr.dPostGallery
+        ? dataArr.dPostGallery.filter(gallery => gallery.postId == curr.id)
         : [];
 
       let post: IDisplayPost = {
@@ -48,30 +48,4 @@ export const adjustPostData = (dataArr: IPostWData): IDisplayPost[] => {
   }
 
   return finalData;
-};
-
-export const getBytes = (value: string) => {
-  let buffer = new ArrayBuffer(value.length * 2);
-  let view = new Uint16Array(buffer);
-
-  for (let i = 0; i < value.length; ++i) {
-    view[i] = value.charCodeAt(i);
-  }
-
-  return buffer;
-};
-
-export const bufferToString = (buffer: ArrayBuffer): string => {
-  return String.fromCharCode.apply(null, Array.from(new Uint16Array(buffer)));
-};
-
-export const base64ToHex = (str: string) => {
-  // const raw = atob(str);
-  let result = '';
-  for (let i = 0; i < str.length; i++) {
-    const hex = str.charCodeAt(i).toString(16);
-    result += hex.length === 2 ? hex : '0' + hex;
-  }
-  // return result.toUpperCase();
-  console.log(typeof result);
 };

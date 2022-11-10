@@ -7,7 +7,7 @@ import {timeAgo} from '../util/timeAgo';
 import {getDistanceInMeter} from '../util/location';
 import {ILocation} from '../interfaces/ILocation';
 import {_BUTTONS} from '../styles/_BUTTONS';
-import {PStatusButtons} from './util/PStatusButtons';
+import {PStatusButtons} from './PostButtons/PostButtons';
 import {PSTATUS} from '../types/enum';
 import {ReadMoreLess} from './util/ReadMoreLess';
 import {IPersonWFields} from '../interfaces/download';
@@ -32,34 +32,34 @@ export function Post({
     dist = getDistanceInMeter(post.post.postLat, post.post.postLng, position);
   }
 
-  const isAngel = user.fields.length > 0;
+  const isAngel = user.dPerson?.person.isAngel;
 
-  const calcStatus = (): PSTATUS => {
-    switch (post.post.postStatus) {
-      case 2: {
-        if (isAngel) {
-          return 2;
-        } else {
-          return 4;
-        }
-      }
-      case 3: {
-        if (isAngel) {
-          return 3;
-        } else {
-          return 5;
-        }
-      }
-      case 5: {
-        return 5;
-      }
-      default: {
-        return 0;
-      }
-    }
-  };
+  // const calcStatus = (): PSTATUS => {
+  //   switch (post.post.postStatus) {
+  //     case 2: {
+  //       if (isAngel) {
+  //         return 2;
+  //       } else {
+  //         return 4;
+  //       }
+  //     }
+  //     case 3: {
+  //       if (isAngel) {
+  //         return 3;
+  //       } else {
+  //         return 5;
+  //       }
+  //     }
+  //     case 5: {
+  //       return 5;
+  //     }
+  //     default: {
+  //       return 0;
+  //     }
+  //   }
+  // };
 
-  const status = calcStatus();
+  // const status = calcStatus();
 
   const pressHandler = (index: number) => {
     //show post details
@@ -85,9 +85,9 @@ export function Post({
           <ImageView gallery={post.postGallery} />
         </ScrollView>
       </View>
-      {(!myPost || (status !== 0 && status !== 3)) && (
-        <PStatusButtons status={status} post={post} />
-      )}
+      {/* {(!myPost || (status !== 0 && status !== 3)) && ( */}
+      <PStatusButtons post={post} isAngel={isAngel} />
+      {/* )} */}
     </View>
   );
 }

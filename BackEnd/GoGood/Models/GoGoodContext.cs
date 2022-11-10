@@ -165,6 +165,8 @@ namespace GoGood.Models
                     .HasDefaultValueSql("(CONVERT([date],getdate(),(105)))");
 
                 entity.Property(e => e.ReviewerId).HasColumnName("reviewerId");
+
+                entity.Property(e => e.PostId).HasColumnName("postId");
             });
 
             OnModelCreatingPartial(modelBuilder);

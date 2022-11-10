@@ -10,7 +10,6 @@ const initialValue = {
 };
 
 export const AuthContext = createContext<ICtx>({
-  isAuthenticated: false,
   userWField: initialValue,
   authenticate: () => {},
   updateFields: () => {},
@@ -40,6 +39,7 @@ export function AuthContextProvider({children}: {children: JSX.Element}) {
       dPerson: dPerson,
       fields: auth.fields,
     };
+
     await AsyncStorage.setItem('user', JSON.stringify(tmp));
 
     setAuth(tmp);
@@ -51,7 +51,6 @@ export function AuthContextProvider({children}: {children: JSX.Element}) {
   }
 
   const value: ICtx = {
-    isAuthenticated: !!auth.dPerson && !!auth.dPerson.person.isAngel,
     userWField: auth,
     authenticate: authenticate,
     updateFields: updateFields,

@@ -86,7 +86,8 @@ CREATE PROCEDURE putDPerson
 @id int,
 @uname nvarchar(50),
 @phone nvarchar(10),
-@image varbinary(max) = NULL
+@image varbinary(max) = NULL,
+@isAngel bit
 
 as
 begin
@@ -95,7 +96,7 @@ begin
 	if @targetId IS NOT NuLL
 	begin
 		update Person
-		set uname = @uname, phone = @phone
+		set uname = @uname, phone = @phone, isAngel = @isAngel
 		where id = @targetId
 		if @image IS NOT NULL
 		begin
@@ -194,7 +195,7 @@ go
 
 
 
-exec signInUp 'dd3 ddd', '1233211230'
+exec signInUp 'dd3 ddd', '0548879522'
 
 DROP Procedure signInUp
 GO
@@ -314,7 +315,7 @@ GO
       select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId, Field.fieldName
 	  from Post left JOIN Field 
 	  ON Field.id = Post.fieldId 
-	  WHERE Post.isDelete = 0 AND Post.postStatus !=3 AND
+	  WHERE Post.isDelete = 0 AND Post.postStatus !=0 AND
 	  fieldId IN( SELECT fieldId = Item FROM SplitInts(@List, ',')); 
 
 	  --select * from #postTable

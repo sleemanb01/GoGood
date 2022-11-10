@@ -93,7 +93,7 @@ namespace GoGood.Controllers
                 return NoContent();
             }
 
-            ICollection<Post> posts = Procs.getPostsWFieldNames(ids, "getPostsByFields", "@List");
+            ICollection<Post> posts = Procs.getPosts(ids, "getPostsByFields", "@List");
             if (posts.Count > 0)
             {
                 return getPostsData(posts);
@@ -112,7 +112,7 @@ namespace GoGood.Controllers
             }
 
 
-            ICollection<Post> posts = Procs.getPostsWFieldNames(id, "getPostsByPerson", "@PersonId");
+            ICollection<Post> posts = Procs.getPosts(id, "getPostsByPerson", "@PersonId");
 
             if (posts.Count > 0)
             {
@@ -132,7 +132,7 @@ namespace GoGood.Controllers
                 return BadRequest();
             }
 
-            ICollection<Post> posts = Procs.getPostsWFieldNames(id, "getPostsByPro", "@ProId");
+            ICollection<Post> posts = Procs.getPosts(id, "getPostsByPro", "@ProId");
 
             if (posts.Count > 0)
             {

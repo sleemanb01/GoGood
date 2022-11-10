@@ -27,9 +27,11 @@ export function Profile() {
   const authCtx = useContext(AuthContext);
   const user = authCtx.userWField.dPerson as IDPerson;
 
+  console.log(user.person);
+
   const [reviews, setReviews] = useState<IDisplayPerson[]>([]);
   useEffect(() => {
-    getReviews(authCtx, setReviews);
+    getReviews(user.person.id as number, setReviews);
   }, []);
 
   const handlePofilePress = () => {

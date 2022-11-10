@@ -22,14 +22,8 @@ export interface IPost {
   postLat?: Double;
   postLng?: Double;
   proffessionalId?: number;
-  postStatus?: number;
+  postStatus: number;
 }
-
-// export interface IPostGallery {
-//   id?: number;
-//   postId?: number;
-//   gallery?: string[];
-// }
 
 export interface IPostPropose {
   id?: number;
@@ -46,6 +40,7 @@ export interface IProfessionalField {
 export interface IProfessionalReview {
   id?: number;
   professionalId: number;
+  postId: number;
   reviewer: number;
   reviewDate: Date;
   review: string;

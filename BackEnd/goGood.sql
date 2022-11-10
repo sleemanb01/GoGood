@@ -1,4 +1,4 @@
-﻿--USE master
+﻿USE master
 GO
 
 IF EXISTS (
@@ -121,10 +121,10 @@ CREATE TABLE ProfessionalField(
 CREATE TABLE ProfessionalReview(
 	id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	ProfessionalId int FOREIGN KEY REFERENCES Person(id),
+	postId INT FOREIGN KEY REFERENCES Post(id),
 	reviewerId int FOREIGN KEY REFERENCES Person(id),
 	reviewDate date DEFAULT CONVERT(DATE, GETDATE(),105),
 	review nvarchar(100)
-	
 )
 
 -------------------------------------------------------
@@ -193,9 +193,9 @@ INSERT INTO Field VALUES
 --(6, 4);
 
 
---select * from PersonImage
+select * from PersonImage
 
---select * from Person
+select * from Person
 
 --select * from Field
 
@@ -205,7 +205,7 @@ select * from Post
 
 --select * from ProfessionalInfo
 
---select * from ProfessionalField
+select * from ProfessionalField
 
 --select * from ProfessionalReview
 

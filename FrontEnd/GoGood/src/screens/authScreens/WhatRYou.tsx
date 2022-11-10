@@ -10,55 +10,56 @@ import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../../hooks/userCtx';
 import {useTranslation} from 'react-i18next';
 import {PrimaryButton} from '../../components/Buttons/PrimaryButton';
-import {IField, IPerson} from '../../interfaces/upload';
-import {getFields, updatePerson} from '../../util/axios';
+import {IField} from '../../interfaces/upload';
+import {updatePerson} from '../../util/axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {IDPerson} from '../../interfaces/download';
+import {USTATUS} from '../../types/enum';
+import {ErrorScreen} from '../utilScreens/ErrorScreen';
+import {getFields} from '../../util/localStorage';
 
 export function WhatRYou() {
   const {t} = useTranslation();
   const authCtx = useContext(AuthContext);
+  const user = authCtx.userWField.dPerson as IDPerson;
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const [isAngel, setIsAngel] = useState(false);
-  const [fields, setFields] = useState<IField[]>([]);
-  // const [success, setSuccess] = useState(true);
-
-  // console.log(authCtx);
+  const [fields, setFields] = useState<IField[] | null>([]);
+  const [success, setSuccess] = useState<USTATUS>(0);
 
   useEffect(() => {
-    getFields(setFields, navigation);
+    getFields(setFields);
   }, []);
 
   useEffect(() => {
-    if (fields.length > 0) {
+    if (fields && fields.length > 0) {
       (async () => {
         await AsyncStorage.setItem('fields', JSON.stringify(fields));
       })();
     }
   }, [fields]);
 
-  const btnPressHandler = (isAngel: boolean) => {
-    setIsAngel(isAngel);
+  if (fields === null) {
+    return <ErrorScreen />;
+  }
+
+  if (success === 3) {
+    navigation.navigate('ErrorScreen');
+  } else if (success === 2) {
+    (async () => {
+      authCtx.updatePerson(updateIsAngel(user, isAngel));
+    })();
+  }
+
+  const btnPressHandler = (value: boolean) => {
+    setIsAngel(value);
   };
 
   const submitHandler = async () => {
-    if (isAngel) {
-      navigation.navigate('Categories', {fields: fields});
-    } else {
-      let person: IPerson = {
-        uname: authCtx.userWField.dPerson?.person.uname as string,
-        phone: authCtx.userWField.dPerson?.person.phone as string,
-        isAngel: isAngel,
-      };
-      let dP: IDPerson = {
-        person: person,
-        pImage: authCtx.userWField.dPerson?.pImage,
-      };
-      updatePerson(dP, authCtx, null);
-    }
+    updatePerson(updateIsAngel(user, isAngel), setSuccess);
   };
 
   return (
@@ -90,4 +91,8 @@ export function WhatRYou() {
       </React.Fragment>
     </CustGradient>
   );
+}
+
+function updateIsAngel(user: IDPerson, isAngel: boolean): IDPerson {
+  return {person: {...user.person, isAngel}, pImage: user.pImage};
 }

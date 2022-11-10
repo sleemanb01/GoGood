@@ -1,8 +1,11 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import {View, Image, Text, Pressable, ScrollView} from 'react-native';
 import {CustGradient} from '../../components/util/CustGradient';
 import {RootStackParamList} from '../../types/RootStackParamList';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {_BUTTONS} from '../../styles/_BUTTONS';
 import {_FONTS} from '../../styles/_FONTS';
 import {categoriesStyles} from '../../styles/STYLES';
@@ -12,29 +15,35 @@ import {postProfessionalFields} from '../../util/axios';
 import {PrimaryButton} from '../../components/Buttons/PrimaryButton';
 import {LoadingScreen} from '../utilScreens/LoadingScreen';
 import {IField, IProfessionalField} from '../../interfaces/upload';
+import {useNavigation} from '@react-navigation/native';
+import {getFields} from '../../util/localStorage';
 
 interface ISelectField {
   field: IField;
   selected: boolean;
 }
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Categories'>;
-
-export function Categories({route, navigation}: Props) {
+export function Categories() {
   const {t} = useTranslation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const authCtx = useContext(AuthContext);
   const [selectedFields, setSelectedFields] = useState<ISelectField[]>([]);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState<boolean | null>(null);
+  const [fields, setFields] = useState<IField[]>([]);
 
-  const fields = route.params?.fields;
   const personId = authCtx.userWField.dPerson?.person.id;
+
+  useLayoutEffect(() => {
+    getFields(setFields);
+  }, []);
 
   if (success) {
     authCtx.updateFields(getChoosenFields(selectedFields));
+  } else if (success === false) {
+    navigation.navigate('ErrorScreen');
   }
-
-  console.log(authCtx.userWField);
 
   useEffect(() => {
     setSelectedFields(addSelection(fields as IField[]));
@@ -42,6 +51,9 @@ export function Categories({route, navigation}: Props) {
 
   if (selectedFields.length === 0) {
     return <LoadingScreen />;
+  }
+  if (success === false) {
+    navigation.navigate('ErrorScreen');
   }
 
   function pressHandler(index: number) {
@@ -52,8 +64,7 @@ export function Categories({route, navigation}: Props) {
 
   const submitHandler = async () => {
     postProfessionalFields(
-      adjustDataForUpload(selectedFields, personId),
-      navigation,
+      adjustDataForUpload(selectedFields, personId as number),
       setSuccess,
     );
   };
@@ -134,7 +145,7 @@ function addSelection(fields: IField[]) {
 
 function adjustDataForUpload(
   selectedFields: ISelectField[],
-  personId: number | undefined,
+  personId: number,
 ): IProfessionalField[] {
   let arr: IProfessionalField[] = [];
 

@@ -44,7 +44,7 @@ export function UserAuthStack() {
   );
 }
 
-export function FieldsAuthStack() {
+export function WhatRUStack() {
   return (
     <Stack.Navigator initialRouteName="WhatRYou">
       <Stack.Screen
@@ -52,6 +52,23 @@ export function FieldsAuthStack() {
         component={WhatRYou}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="ErrorScreen"
+        component={ErrorScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="LoadingScreen"
+        component={LoadingScreen}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+}
+
+export function ChooseStack() {
+  return (
+    <Stack.Navigator initialRouteName="WhatRYou">
       <Stack.Screen
         name="Categories"
         component={Categories}

@@ -1,9 +1,5 @@
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import axios from 'axios';
-import {RootStackParamList} from '../types/RootStackParamList';
-import {ICtx} from '../interfaces/ICtx';
-import {adjustPostData} from './dataHandler';
-import {IPostWGallery, IPersonWFields, IDPerson} from '../interfaces/download';
+import {IPostWGallery, IDPerson, IPersonWFields} from '../interfaces/download';
 import {
   IPerson,
   IPostPropose,
@@ -13,31 +9,62 @@ import {
 
 const url = 'http://10.0.2.2:7070/api/';
 
+/* *************************** GET *************************** */
+
+/* *************************** */
 export const getPosts = async (
   param: string,
   setPosts: Function,
-  navigation: NativeStackNavigationProp<RootStackParamList>,
-  setIsLoading: Function,
   controller: string,
 ) => {
-  if (param.length > 0) {
-    try {
-      const result = await axios.get(url + controller + param);
-      const finalData = adjustPostData(result.data);
-      setIsLoading(false);
-      setPosts(finalData);
-    } catch (err) {
-      console.log(err);
-      navigation.navigate('ErrorScreen');
+  try {
+    const result = await axios.get(url + controller + param);
+    const status = result.status;
+    if (status === 200 || status === 204) {
+      setPosts(result.data);
     }
+  } catch (err) {
+    setPosts(null);
   }
 };
 
-export const postPost = async (
-  post: IPostWGallery,
-  navigation: NativeStackNavigationProp<RootStackParamList>,
-  setSuccess: Function,
-) => {
+/* *************************** */
+
+export const fetchFields = async (setFields: Function) => {
+  const controller = 'Fields';
+  try {
+    const result = await axios.get(url + controller);
+    const status = result.status;
+    if (status === 200) {
+      setFields(result.data);
+    } else if (status === 204) {
+      setFields([]);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/* *************************** */
+export async function getReviews(personId: number, setReviews: Function) {
+  try {
+    const controller = 'Persons/GetPersonReviews/';
+    const result = await axios.get(url + controller + personId);
+    const status = result.status;
+    if (status === 200) {
+      setReviews(result.data);
+    } else if (status === 204) {
+      setReviews([]);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+/* *************************** POST *************************** */
+
+/* *************************** */
+export const postPost = async (post: IPostWGallery, setSuccess: Function) => {
   try {
     const controller = 'Posts/postPostWGallery';
     const result = await axios.post(url + controller, post);
@@ -46,30 +73,13 @@ export const postPost = async (
     }
   } catch (err) {
     console.log(err);
-    navigation.navigate('ErrorScreen');
+    setSuccess(false);
   }
 };
 
-export const getFields = async (
-  setFields: Function,
-  navigation: NativeStackNavigationProp<RootStackParamList>,
-) => {
-  const controller = 'Fields';
-  try {
-    const result = await axios.get(url + controller);
-    let data = result.data;
-    if (result.status === 200) {
-      setFields(data);
-    }
-  } catch (err) {
-    console.log(err);
-    navigation.navigate('ErrorScreen');
-  }
-};
-
+/* *************************** */
 export const postProfessionalFields = async (
   pFields: IProfessionalField[],
-  navigation: NativeStackNavigationProp<RootStackParamList>,
   setSuccess: Function,
 ) => {
   const controller = 'ProfessionalFields/postProfessionalFields';
@@ -80,55 +90,42 @@ export const postProfessionalFields = async (
     }
   } catch (err) {
     console.log(err);
-    navigation.navigate('ErrorScreen');
+    setSuccess(false);
   }
 };
 
-export const signInUp = async (
-  person: IPerson,
-  navigation: NativeStackNavigationProp<RootStackParamList>,
-  authCtx: ICtx,
-) => {
+/* *************************** */
+export const signInUp = async (person: IPerson, setUser: Function) => {
   const controller = 'Persons/signInUp/';
   try {
     const result = await axios.post(url + controller, person);
 
     if (result.status === 200) {
-      (async () => {
-        authCtx.authenticate(result.data as IPersonWFields);
-      })();
+      // console.log(result.data);
+      setUser(result.data as IPersonWFields);
     }
   } catch (err) {
     console.log(err);
-    navigation.navigate('ErrorScreen');
+    setUser(null);
   }
 };
 
-export async function updatePerson(
-  user: IDPerson,
-  authCtx: ICtx,
-  setSuccess: Function | null,
-) {
+/* *************************** */
+export async function updatePerson(user: IDPerson, setSuccess: Function) {
   try {
     const controller = 'Persons/putDPerson';
     const result = await axios.post(url + controller, user);
 
     if (result.status === 200) {
-      (async () => {
-        authCtx.updatePerson(result.data as IDPerson);
-      })();
-      if (setSuccess) {
-        setSuccess(2);
-      }
+      setSuccess(2);
     }
   } catch (err) {
     console.log(err);
-    if (setSuccess) {
-      setSuccess(3);
-    }
+    setSuccess(3);
   }
 }
 
+/* *************************** */
 export async function postPropose(propose: IPostPropose, setSuccess: Function) {
   try {
     const controller = 'PostProposes';
@@ -143,6 +140,9 @@ export async function postPropose(propose: IPostPropose, setSuccess: Function) {
   }
 }
 
+/* *************************** DELETE *************************** */
+
+/* *************************** */
 export async function deletePropose(id: number, setSuccess: Function) {
   try {
     const controller = 'PostProposes/';
@@ -157,6 +157,9 @@ export async function deletePropose(id: number, setSuccess: Function) {
   }
 }
 
+/* *************************** PUT *************************** */
+
+/* *************************** */
 export async function putPost(post: IPost, setSuccess: Function) {
   try {
     const controller = 'Posts';
@@ -168,19 +171,5 @@ export async function putPost(post: IPost, setSuccess: Function) {
   } catch (err) {
     console.log(err);
     setSuccess(false);
-  }
-}
-
-export async function getReviews(authCtx: ICtx, setReviews: Function) {
-  try {
-    const controller = 'Persons/GetPersonReviews/';
-    const result = await axios.get(
-      url + controller + authCtx.userWField.dPerson?.person.id,
-    );
-    let data = result.data;
-
-    setReviews(data);
-  } catch (err) {
-    console.log(err);
   }
 }

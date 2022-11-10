@@ -32,16 +32,14 @@ namespace GoGood
                         var isAngel = dr.GetValue(3);
                         if (!DBNull.Value.Equals(isAngel))
                         {
-                            tmp.IsAngel = Convert.ToBoolean(dr.GetInt32(3));
+                            tmp.IsAngel = Convert.ToBoolean(isAngel);
                         }
                         else
                         {
                             tmp.IsAngel = null;
                         }
 
-                        dPerson.person = tmp;
-
-                        var image = dr.GetValue(3);
+                        var image = dr.GetValue(4);
                         if (!DBNull.Value.Equals(image))
                         {
                             dPerson.pImage = Encoding.UTF8.GetString((byte[])image);
@@ -50,6 +48,8 @@ namespace GoGood
                         {
                             dPerson.pImage = null;
                         }
+
+                        dPerson.person = tmp;
                     }
 
                     con.Close();
@@ -100,6 +100,7 @@ namespace GoGood
                     cmd.Parameters.AddWithValue("@id", dPerson.person.Id);
                     cmd.Parameters.AddWithValue("@uname", dPerson.person.Uname);
                     cmd.Parameters.AddWithValue("@phone", dPerson.person.Phone);
+                    cmd.Parameters.AddWithValue("@isAngel", dPerson.person.IsAngel);
                     if (data != null)
                     {
                         byte[] tmp = Encoding.ASCII.GetBytes(data);
@@ -118,7 +119,7 @@ namespace GoGood
                         var isAngel = dr.GetValue(3);
                         if (!DBNull.Value.Equals(isAngel))
                         {
-                            tmp.IsAngel = Convert.ToBoolean(dr.GetInt32(3));
+                            tmp.IsAngel = Convert.ToBoolean(isAngel);
                         }
                         else
                         {
@@ -126,7 +127,7 @@ namespace GoGood
                         }
 
                         dp.person = tmp;
-                        var image = dr.GetValue(3);
+                        var image = dr.GetValue(4);
                         if (!DBNull.Value.Equals(image))
                         {
                             dp.pImage = Encoding.UTF8.GetString((byte[])image);
@@ -162,9 +163,10 @@ namespace GoGood
                         var tmp = new ProfessionalReview();
                         tmp.Id = dr.GetInt32(0);
                         tmp.ProfessionalId = dr.GetInt32(1);
-                        tmp.ReviewerId = dr.GetInt32(2);
-                        tmp.ReviewDate = dr.GetDateTime(3);
-                        tmp.Review = dr.GetString(4);
+                        tmp.PostId = dr.GetInt32(2);
+                        tmp.ReviewerId = dr.GetInt32(3);
+                        tmp.ReviewDate = dr.GetDateTime(4);
+                        tmp.Review = dr.GetString(5);
 
                         pr.Add(tmp);
 
@@ -227,7 +229,7 @@ namespace GoGood
 
         // ************************************************** POSTS
 
-        public static ICollection<Post> getPostsWFieldNames(string ids, string proc, string param)
+        public static ICollection<Post> getPosts(string ids, string proc, string param)
         {
 
             var posts = new List<Post>();
@@ -308,7 +310,7 @@ namespace GoGood
 
             using (SqlConnection con = new SqlConnection(conStr))
             {
-                using (SqlCommand cmd = new SqlCommand("getProposes", con))
+                using (SqlCommand cmd = new SqlCommand("getGallery", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@List", postIds);

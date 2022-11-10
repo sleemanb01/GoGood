@@ -8,7 +8,6 @@ import {useTranslation} from 'react-i18next';
 import {ILocation} from '../interfaces/ILocation';
 import {getLocation} from '../util/location';
 import {MyRequests} from './mainScreens/MyRequests';
-
 import {mainStyles} from '../styles/STYLES';
 import {LoadingScreen} from './utilScreens/LoadingScreen';
 

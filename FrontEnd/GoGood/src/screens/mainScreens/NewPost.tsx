@@ -18,8 +18,7 @@ import {
 import {PrimaryButton} from '../../components/Buttons/PrimaryButton';
 import {imageStyles, loginStyles} from '../../styles/STYLES';
 import {_FONTS} from '../../styles/_FONTS';
-import useAsyncStorage from '@react-native-async-storage/async-storage';
-import {getFields, postPost} from '../../util/axios';
+import {postPost} from '../../util/axios';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {newPostStyles} from '../../styles/STYLES';
 import {RootStackParamList} from '../../types/RootStackParamList';
@@ -35,18 +34,21 @@ import {
 } from '../../interfaces/download';
 import {IField, IPost} from '../../interfaces/upload';
 import {ImagePickerModal} from '../../components/util/ImagePickerModal';
+import {ErrorScreen} from '../utilScreens/ErrorScreen';
+import {getFields} from '../../util/localStorage';
+import {LoadingScreen} from '../utilScreens/LoadingScreen';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'NewPost'>;
 
 export function NewPost({route, navigation}: Props) {
   const {t} = useTranslation();
-  const [fields, setFields] = useState<IField[]>([]);
+  const [fields, setFields] = useState<IField[] | null>([]);
   const [modalisVisible, setmodalisVisible] = useState(false);
   const [selected, setSelected] = useState<IField | null>(null);
   const [uriis, setUriis] = useState<Asset[]>([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState<boolean | null>(null);
 
   const titleRef = useRef<TextInput | null>(null);
   const contentRef = useRef<TextInput | null>(null);
@@ -55,14 +57,7 @@ export function NewPost({route, navigation}: Props) {
   const position = route.params.position;
 
   useLayoutEffect(() => {
-    (async () => {
-      const tmp = await useAsyncStorage.getItem('fields');
-      if (tmp) {
-        setFields(JSON.parse(tmp));
-      } else {
-        getFields(setFields, navigation);
-      }
-    })();
+    getFields(setFields);
   }, []);
 
   useEffect(() => {
@@ -70,6 +65,14 @@ export function NewPost({route, navigation}: Props) {
       navigation.navigate('App');
     }
   }, [success]);
+
+  if (fields === null) {
+    return <LoadingScreen />;
+  }
+  if (success === false) {
+    navigation.navigate('ErrorScreen');
+  }
+
   const titleChangeHandler = (
     event: NativeSyntheticEvent<TextInputChangeEventData>,
   ) => {
@@ -82,7 +85,7 @@ export function NewPost({route, navigation}: Props) {
     setContent(event.nativeEvent.text);
   };
 
-  const submit = () => {
+  const submitHandler = () => {
     if (!selected) {
       Alert.alert(t('missingField'), t('chooseField'), [{text: t('ok')}]);
     } else if (!nonEmpty(title)) {
@@ -90,7 +93,6 @@ export function NewPost({route, navigation}: Props) {
     } else if (!nonEmpty(content)) {
       contentRef.current?.focus();
     } else {
-      console.log('submit');
       let postToPost: IPost = {
         postTitle: title,
         postDescription: content,
@@ -112,7 +114,7 @@ export function NewPost({route, navigation}: Props) {
         post: postToPost,
         dPostGallery: dGallery,
       };
-      postPost(pwg, navigation, setSuccess);
+      postPost(pwg, setSuccess);
     }
   };
 
@@ -127,7 +129,7 @@ export function NewPost({route, navigation}: Props) {
           </View>
           <View style={newPostStyles.mainContainer}>
             <Dropdown
-              arr={fields}
+              arr={fields as IField[]}
               selected={selected}
               setSelected={setSelected}
             />
@@ -178,7 +180,7 @@ export function NewPost({route, navigation}: Props) {
             </ScrollView>
           </View>
           <View style={newPostStyles.footerContainer}>
-            <PrimaryButton text={t('addRequest')} onPress={submit} />
+            <PrimaryButton text={t('addRequest')} onPress={submitHandler} />
           </View>
         </React.Fragment>
       </TouchableWithoutFeedback>
