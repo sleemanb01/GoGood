@@ -20,6 +20,20 @@ namespace GoGood.Controllers
             _context = context;
         }
 
+        // GET: api/PostProposes/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PostPropose>> GetPostPropose(int id)
+        {
+            var postPropose = await _context.PostProposes.FindAsync(id);
+
+            if (postPropose == null)
+            {
+                return NotFound();
+            }
+
+            return postPropose;
+        }
+
         // POST: api/PostProposes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

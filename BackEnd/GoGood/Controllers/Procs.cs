@@ -200,7 +200,7 @@ namespace GoGood
                         var isAngel = dr.GetValue(3);
                         if (!DBNull.Value.Equals(isAngel))
                         {
-                            tmp.IsAngel = Convert.ToBoolean(dr.GetInt32(3));
+                            tmp.IsAngel = Convert.ToBoolean(isAngel);
                         }
                         else
                         {
@@ -208,10 +208,10 @@ namespace GoGood
                         }
 
                         dp.person = tmp;
-                        var image = dr.GetValue(3);
+                        var image = dr.GetValue(4);
                         if (!DBNull.Value.Equals(image))
                         {
-                            dp.pImage = Encoding.UTF8.GetString((byte[])image);
+                            dp.pImage = Convert.ToString(image);
                         }
                         else
                         {

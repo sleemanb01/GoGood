@@ -7,12 +7,11 @@ import {timeAgo} from '../util/timeAgo';
 import {getDistanceInMeter} from '../util/location';
 import {ILocation} from '../interfaces/ILocation';
 import {_BUTTONS} from '../styles/_BUTTONS';
-import {PStatusButtons} from './PostButtons/PostButtons';
-import {PSTATUS} from '../types/enum';
 import {ReadMoreLess} from './util/ReadMoreLess';
 import {IPersonWFields} from '../interfaces/download';
 import {ImageView} from './util/ImageView';
 import {IField} from '../interfaces/upload';
+import {PostButtons} from './PostButtons/PostButtons';
 
 export function Post({
   field,
@@ -33,6 +32,8 @@ export function Post({
   }
 
   const isAngel = user.dPerson?.person.isAngel;
+
+  // console.log(post);
 
   // const calcStatus = (): PSTATUS => {
   //   switch (post.post.postStatus) {
@@ -86,7 +87,7 @@ export function Post({
         </ScrollView>
       </View>
       {/* {(!myPost || (status !== 0 && status !== 3)) && ( */}
-      <PStatusButtons post={post} isAngel={isAngel} />
+      <PostButtons post={post} isAngel={isAngel} />
       {/* )} */}
     </View>
   );

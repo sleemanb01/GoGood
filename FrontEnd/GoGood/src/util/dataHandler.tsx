@@ -5,13 +5,13 @@ import {IDisplayPost} from '../interfaces/view';
 
 const getProfessionals = (
   dataArr: IPostPropose[],
-  pf: IDPerson[],
+  dPeople: IDPerson[],
 ): IDPerson[] => {
   let professionals: IDPerson[] = [];
 
-  pf.map((curr: IDPerson) => {
-    let p = dataArr.find(p => curr.person.id === p.proffessionalId);
-    if (p) {
+  dPeople.map((curr: IDPerson) => {
+    let person = dataArr.find(p => curr.person.id === p.proffessionalId);
+    if (person) {
       professionals.push(curr);
     }
   });
@@ -22,6 +22,8 @@ const getProfessionals = (
 export const adjustPostData = (dataArr: IPostsWData): IDisplayPost[] => {
   let finalData: IDisplayPost[] = [];
 
+  // console.log(dataArr.professionalProposers);
+
   if (dataArr) {
     dataArr.posts.map((curr: IPost) => {
       let postProposes: IPostPropose[] = dataArr.postProposes
@@ -29,6 +31,7 @@ export const adjustPostData = (dataArr: IPostsWData): IDisplayPost[] => {
             propose => (propose.postId = curr.id as number),
           )
         : [];
+
       let professionalProposers: IDPerson[] = dataArr.professionalProposers
         ? getProfessionals(postProposes, dataArr.professionalProposers)
         : [];

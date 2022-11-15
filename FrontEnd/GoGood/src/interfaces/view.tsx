@@ -3,9 +3,9 @@ import {IPostPropose, IPost, IProfessionalReview} from './upload';
 
 export interface IDisplayPost {
   post: IPost;
-  professionalProposers?: IDPerson[];
-  postProposes?: IPostPropose[];
-  postGallery?: IDPostGallery[];
+  professionalProposers: IDPerson[];
+  postProposes: IPostPropose[];
+  postGallery: IDPostGallery[];
 }
 
 export interface IDisplayPerson {

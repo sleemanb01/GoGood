@@ -215,7 +215,11 @@ export const imageStyles = StyleSheet.create({
     height: 100,
     width: 150,
   },
-  second: {margin: 5, width: 85, height: 85},
+  second: {
+    margin: 5,
+    width: 85,
+    height: 85,
+  },
   main: {
     margin: 5,
     width: 160,
@@ -252,6 +256,12 @@ export const imageStyles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     marginBottom: 10,
+  },
+  tinyProfileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    // marginBottom: 10,
   },
 });
 

@@ -61,7 +61,15 @@
       "youBennThanked": "מסרו לך תודה",
       "readComment":"קרא את התגובה",
       "readLess": "קרא פחות",
-      "readMore": "קרא יותר"
+      "readMore": "קרא יותר",
+      "handled": "טופל",
+      "acceptProposer": "אישור המציע",
+      "waitingForDate": "ממתין לקביעת תאריך",
+      "waitingForAccept": "מחכה לאישור",
+      "waitingForDateAccept": "מחכה לאישור התאריך",
+      "confirmDate": "אישור תאריך",
+      "setDate": "קבע תאריך",
+      "handling": "בטיפול"
 
     }
 }

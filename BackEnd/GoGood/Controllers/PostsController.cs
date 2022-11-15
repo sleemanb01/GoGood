@@ -36,7 +36,7 @@ namespace GoGood.Controllers
 
                 post = postWGallery.post;
                 post.IsDelete = 0;
-                post.PostStatus = 0;
+                post.PostStatus = 2;
                 _context.Posts.Add(post);
 
                 await _context.SaveChangesAsync();
@@ -157,13 +157,13 @@ namespace GoGood.Controllers
             var proIds = "";
             foreach (var p in PostProposes)
             {
-                proIds += p.Id + ",";
+                proIds += p.ProffessionalId + ",";
             }
 
             var professionalProposers = Procs.getDPeople(proIds);
 
-            pwd.posts = posts;
-            pwd.professionalProposers = professionalProposers;
+            pwd.Posts = posts;
+            pwd.ProfessionalProposers = professionalProposers;
             pwd.PostProposes = PostProposes;
             pwd.DPostGallery = DPostGallery;
 

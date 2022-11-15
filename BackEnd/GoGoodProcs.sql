@@ -22,7 +22,7 @@ GO
 DROP Procedure getProposes
 GO
 
-exec getProposes '2,5'
+exec getProposes '1,5'
 GO
 
 --------------------------------------------------------
@@ -275,19 +275,19 @@ CREATE PROCEDURE getPostsByPro
 
 as
 Begin
- select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId, Field.fieldName into #postTable 
+ select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId into #postTable 
 	  from Post left JOIN Field 
 	  ON Field.id = Post.fieldId 
 	  WHERE Post.isDelete = 0 AND Post.proffessionalId = @proId
 
 	  select * from #postTable
 
-	  select Person.id, Person.uname, Person.phone, PersonImage.pImage
-	  from Person
-	  join #postTable t1 
-	  on t1.proffessionalId = Person.id 
-	  left join PersonImage 
-	  on Person.id = PersonImage.personId 
+	  --select Person.id, Person.uname, Person.phone, PersonImage.pImage
+	  --from Person
+	  --join #postTable t1 
+	  --on t1.proffessionalId = Person.id 
+	  --left join PersonImage 
+	  --on Person.id = PersonImage.personId 
 
 	  --update #dPerson set personImage = 0 where personImage IS NULL
 
@@ -312,7 +312,7 @@ GO
  AS
  BEGIN
       
-      select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId, Field.fieldName
+      select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId
 	  from Post left JOIN Field 
 	  ON Field.id = Post.fieldId 
 	  WHERE Post.isDelete = 0 AND Post.postStatus !=0 AND
@@ -405,4 +405,4 @@ exec getReviews 1
 DROP Procedure getDPeople
 GO
 
-exec getDPeople '1,2'
+exec getDPeople '1,'

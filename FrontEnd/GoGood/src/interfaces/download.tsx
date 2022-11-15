@@ -8,12 +8,12 @@ import {
 
 export interface IDPerson {
   person: IPerson;
-  pImage?: string;
+  pImage: string;
 }
 
 export interface IDPostGallery {
-  id?: number;
-  postId?: number;
+  id: number;
+  postId: number;
   dGallery: string;
 }
 
@@ -34,7 +34,7 @@ export interface IPersonWFields {
 
 export interface IPostsWData {
   posts: IPost[];
-  professionalProposers?: IDPerson[];
-  postProposes?: IPostPropose[];
-  dPostGallery?: IDPostGallery[];
+  professionalProposers: IDPerson[];
+  postProposes: IPostPropose[];
+  dPostGallery: IDPostGallery[];
 }

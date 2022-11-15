@@ -47,7 +47,7 @@ export function EditProfile() {
         phone: phone,
         isAngel: user.person.isAngel,
       };
-      let dp: IDPerson = {person: p, pImage: urii[0].base64};
+      let dp: IDPerson = {person: p, pImage: urii[0].base64 as string};
       (async () => {
         authCtx.updatePerson(dp);
       })();
