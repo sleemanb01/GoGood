@@ -2,7 +2,7 @@ import React, {FC, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {IField} from '../../interfaces/upload';
-import {dropDownStyles, imageStyles} from '../../styles/STYLES';
+import {dropDownStyles, imageStyles} from '../../constants/STYLES';
 
 export function Dropdown({
   arr,

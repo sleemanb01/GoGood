@@ -1,14 +1,14 @@
 import React from 'react';
 import {ScrollView, Text, View} from 'react-native';
 import {IDisplayPost} from '../interfaces/view';
-import {_FONTS} from '../styles/_FONTS';
-import {postStyles} from '../styles/STYLES';
+import {_FONTS} from '../constants/_FONTS';
+import {postStyles} from '../constants/STYLES';
 import {timeAgo} from '../util/timeAgo';
 import {getDistanceInMeter} from '../util/location';
 import {ILocation} from '../interfaces/ILocation';
-import {_BUTTONS} from '../styles/_BUTTONS';
+import {_BUTTONS} from '../constants/_BUTTONS';
 import {ReadMoreLess} from './util/ReadMoreLess';
-import {IPersonWFields} from '../interfaces/download';
+import {IDPerson, IPersonWFields} from '../interfaces/download';
 import {ImageView} from './util/ImageView';
 import {IField} from '../interfaces/upload';
 import {PostButtons} from './PostButtons/PostButtons';
@@ -32,35 +32,6 @@ export function Post({
   }
 
   const isAngel = user.dPerson?.person.isAngel;
-
-  // console.log(post);
-
-  // const calcStatus = (): PSTATUS => {
-  //   switch (post.post.postStatus) {
-  //     case 2: {
-  //       if (isAngel) {
-  //         return 2;
-  //       } else {
-  //         return 4;
-  //       }
-  //     }
-  //     case 3: {
-  //       if (isAngel) {
-  //         return 3;
-  //       } else {
-  //         return 5;
-  //       }
-  //     }
-  //     case 5: {
-  //       return 5;
-  //     }
-  //     default: {
-  //       return 0;
-  //     }
-  //   }
-  // };
-
-  // const status = calcStatus();
 
   const pressHandler = (index: number) => {
     //show post details
@@ -86,9 +57,13 @@ export function Post({
           <ImageView gallery={post.postGallery} />
         </ScrollView>
       </View>
-      {/* {(!myPost || (status !== 0 && status !== 3)) && ( */}
-      <PostButtons post={post} isAngel={isAngel} />
-      {/* )} */}
+      <View style={postStyles.footerContainer}>
+        <PostButtons
+          post={post}
+          isAngel={isAngel}
+          user={user.dPerson as IDPerson}
+        />
+      </View>
     </View>
   );
 }

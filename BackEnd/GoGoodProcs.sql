@@ -236,19 +236,18 @@ CREATE PROCEDURE getPostsByPerson
 
 as
 Begin
- select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId into #postTable 
-	  from Post left JOIN Field 
-	  ON Field.id = Post.fieldId 
+	select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId
+	  from Post
 	  WHERE Post.isDelete = 0 AND Post.personId = @PersonId
 
-	  select * from #postTable
+	  --select * from #postTable
 
-	  select Person.id, Person.uname, Person.phone, PersonImage.pImage into #dPerson
-	  from Person
-	  join #postTable t1 
-	  on t1.proffessionalId = Person.id 
-	  left join PersonImage 
-	  on Person.id = PersonImage.personId 
+	  --select Person.id, Person.uname, Person.phone, PersonImage.pImage into #dPerson
+	  --from Person
+	  --join #postTable t1 
+	  --on t1.proffessionalId = Person.id 
+	  --left join PersonImage 
+	  --on Person.id = PersonImage.personId 
 
 	  --update #dPerson set personImage = 0 where personImage IS NULL
 
@@ -260,7 +259,7 @@ Begin
 end
 GO
 
-exec getPostsByPerson 1
+exec getPostsByPerson 2
 GO
 
 DROP Procedure getPostsByPerson

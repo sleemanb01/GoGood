@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Image} from 'react-native';
 import {IDPostGallery} from '../../interfaces/download';
-import {imageStyles} from '../../styles/STYLES';
+import {imageStyles} from '../../constants/STYLES';
 
 export function ImageView({gallery}: {gallery: IDPostGallery[] | undefined}) {
   if (gallery === undefined) {

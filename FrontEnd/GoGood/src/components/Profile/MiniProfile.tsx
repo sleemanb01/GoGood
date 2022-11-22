@@ -1,15 +1,15 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Image, Pressable, Text} from 'react-native';
-import {IPersonWFields} from '../../interfaces/download';
-import {commonStyles, imageStyles} from '../../styles/STYLES';
-import {_FONTS} from '../../styles/_FONTS';
+import {IDPerson, IPersonWFields} from '../../interfaces/download';
+import {commonStyles, imageStyles} from '../../constants/STYLES';
+import {_FONTS} from '../../constants/_FONTS';
 
-export function MiniProfile({user}: {user: IPersonWFields | undefined}) {
+export function MiniProfile({user}: {user: IDPerson | undefined}) {
   const {t} = useTranslation();
 
-  user = user as IPersonWFields;
-  const image = user.dPerson?.pImage;
+  user = user as IDPerson;
+  const image = user.pImage;
 
   return (
     <View style={commonStyles.rowSpaceBetween}>
@@ -24,7 +24,7 @@ export function MiniProfile({user}: {user: IPersonWFields | undefined}) {
         />
         <Pressable>
           <View>
-            <Text style={_FONTS.blackTextB}>{user.dPerson?.person.uname}</Text>
+            <Text style={_FONTS.blackTextB}>{user.person.uname}</Text>
             <Text style={_FONTS.btnBlackTextWithU}>{t('profileDetails')}</Text>
           </View>
         </Pressable>

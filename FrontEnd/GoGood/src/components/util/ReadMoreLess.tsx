@@ -38,7 +38,7 @@
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Text} from 'react-native';
-import {_FONTS} from '../../styles/_FONTS';
+import {_FONTS} from '../../constants/_FONTS';
 
 export function ReadMoreLess({Description}: {Description: string}) {
   const limit = 30;

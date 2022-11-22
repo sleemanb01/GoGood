@@ -1,4 +1,5 @@
 import {Double} from 'react-native/Libraries/Types/CodegenTypes';
+import {PSTATUS} from '../types/enum';
 
 export interface IField {
   fieldName: string;
@@ -22,7 +23,8 @@ export interface IPost {
   postLat?: Double;
   postLng?: Double;
   proffessionalId?: number;
-  postStatus: number;
+  handleDate?: Date;
+  postStatus?: PSTATUS;
 }
 
 export interface IPostPropose {

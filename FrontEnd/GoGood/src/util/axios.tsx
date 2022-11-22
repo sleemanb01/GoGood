@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {OK, NoContent, Created} from '../constants/HttpResponses';
 import {IPostWGallery, IDPerson, IPersonWFields} from '../interfaces/download';
 import {
   IPerson,
@@ -9,10 +10,6 @@ import {
 import {USTATUS} from '../types/enum';
 
 const url = 'http://10.0.2.2:7070/api/';
-
-const OK = 200;
-const Created = 201;
-const NoContent = 204;
 
 /* *************************** GET *************************** */
 
@@ -25,7 +22,7 @@ export const getPosts = async (
   try {
     const result = await axios.get(url + controller + param);
     const status = result.status;
-    if (status === 200 || status === 204) {
+    if (status === OK || status === NoContent) {
       setPosts(result.data);
     }
   } catch (err) {
@@ -122,59 +119,61 @@ export async function updatePerson(user: IDPerson, setSuccess: Function) {
     const result = await axios.post(url + controller, user);
 
     if (result.status === OK) {
-      setSuccess(2);
-    }
-  } catch (err) {
-    console.log(err);
-    setSuccess(3);
-  }
-}
-
-/* *************************** */
-export async function postPropose(propose: IPostPropose, setSuccess: Function) {
-  try {
-    const controller = 'PostProposes';
-    const result = await axios.post(url + controller, propose);
-
-    if (result.status === Created) {
       setSuccess(USTATUS.SUCCESS);
     }
   } catch (err) {
     console.log(err);
     setSuccess(USTATUS.FAILED);
+  }
+}
+
+/* *************************** */
+export async function postPropose(propose: IPostPropose) {
+  try {
+    const controller = 'PostProposes';
+    const result = await axios.post(url + controller, propose);
+
+    if (result.status === Created) {
+      // setSuccess(USTATUS.SUCCESS);
+      return result.data;
+    }
+  } catch (err) {
+    console.log(err);
+    // setSuccess(USTATUS.FAILED);
+    return undefined;
   }
 }
 
 /* *************************** DELETE *************************** */
 
 /* *************************** */
-export async function deletePropose(id: number, setSuccess: Function) {
+export async function deletePropose(id: number) {
   try {
     const controller = 'PostProposes/';
     const result = await axios.delete(url + controller + id);
 
     if (result.status === NoContent) {
-      setSuccess(USTATUS.SUCCESS);
+      return true;
     }
   } catch (err) {
     console.log(err);
-    setSuccess(USTATUS.FAILED);
+    return undefined;
   }
 }
 
 /* *************************** PUT *************************** */
 
 /* *************************** */
-export async function putPost(post: IPost, setSuccess: Function) {
+export async function putPost(post: IPost) {
   try {
-    const controller = 'Posts';
-    const result = await axios.put(url + controller, post);
+    const controller = 'Posts/';
+    const result = await axios.put(url + controller + post.id, post);
 
-    if (result.status === OK) {
-      setSuccess(true);
+    if (result.status === OK || result.status === NoContent) {
+      return true;
     }
   } catch (err) {
     console.log(err);
-    setSuccess(false);
+    return false;
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image} from 'react-native';
-import {imageStyles} from '../../styles/STYLES';
+import {imageStyles} from '../../constants/STYLES';
 import {USTATUS} from '../../types/enum';
 
 export function UStatusImage({status}: {status: USTATUS}) {

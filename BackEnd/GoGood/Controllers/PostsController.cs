@@ -21,7 +21,40 @@ namespace GoGood.Controllers
             _context = context;
         }
 
-        // POST: api/postPostWGallery
+        // PUT: api/Posts/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPost([FromRoute] int id, [FromBody] Post post)
+        {
+            if (id != post.Id)
+            {
+                return BadRequest();
+            }
+
+            post.IsDelete = 0;
+
+            _context.Entry(post).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PostExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Posts/postPostWGallery
         [HttpPost("postPostWGallery")]
         public async Task<ActionResult<PostWGallery>> postPostWGallery(PostWGallery postWGallery)
         {
@@ -80,7 +113,7 @@ namespace GoGood.Controllers
             }
         }
 
-        // GET: api/getPostsByFields
+        // GET: api/Posts/getPostsByFields
         [HttpGet("getPostsByFields/{ids}")]
         public ActionResult<PostWData> getPostsByFields(string ids)
         {
@@ -102,7 +135,7 @@ namespace GoGood.Controllers
             return NoContent();
         }
 
-        // GET: api/getPostsByPerson
+        // GET: api/Posts/getPostsByPerson
         [HttpGet("getPostsByPerson/{id}")]
         public ActionResult<PostWData> getPostsByPerson(string id)
         {
@@ -122,7 +155,7 @@ namespace GoGood.Controllers
             return NoContent();
         }
 
-        // GET: api/getPostsByPro
+        // GET: api/Posts/getPostsByPro
         [HttpGet("getPostsByPro/{id}")]
         public ActionResult<PostWData> getPostsByPro(string id)
         {

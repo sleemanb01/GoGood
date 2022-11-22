@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, Pressable, Text} from 'react-native';
-import {imageStyles} from '../../styles/STYLES';
-import {_BUTTONS} from '../../styles/_BUTTONS';
+import {imageStyles} from '../../constants/STYLES';
+import {_BUTTONS} from '../../constants/_BUTTONS';
 
 export function CloseButton({onPress}: {onPress: Function}) {
   return (

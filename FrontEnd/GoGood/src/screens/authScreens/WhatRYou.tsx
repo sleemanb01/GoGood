@@ -1,9 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Image, Pressable, Text, View} from 'react-native';
 import {CustGradient} from '../../components/util/CustGradient';
-import {_FONTS} from '../../styles/_FONTS';
-import {WhoRYouStyles} from '../../styles/STYLES';
-import {_BUTTONS} from '../../styles/_BUTTONS';
+import {_FONTS} from '../../constants/_FONTS';
+import {WhoRYouStyles} from '../../constants/STYLES';
+import {_BUTTONS} from '../../constants/_BUTTONS';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/RootStackParamList';
 import {useNavigation} from '@react-navigation/native';

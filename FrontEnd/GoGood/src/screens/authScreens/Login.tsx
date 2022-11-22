@@ -13,10 +13,10 @@ import {
   Keyboard,
 } from 'react-native';
 import {CustGradient} from '../../components/util/CustGradient';
-import {commonStyles, loginStyles} from '../../styles/STYLES';
+import {commonStyles, loginStyles} from '../../constants/STYLES';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {_BUTTONS} from '../../styles/_BUTTONS';
-import {_FONTS} from '../../styles/_FONTS';
+import {_BUTTONS} from '../../constants/_BUTTONS';
+import {_FONTS} from '../../constants/_FONTS';
 import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../../hooks/userCtx';
 import {useTranslation} from 'react-i18next';

@@ -16,11 +16,11 @@ import {
   View,
 } from 'react-native';
 import {PrimaryButton} from '../../components/Buttons/PrimaryButton';
-import {imageStyles, loginStyles} from '../../styles/STYLES';
-import {_FONTS} from '../../styles/_FONTS';
+import {imageStyles, loginStyles} from '../../constants/STYLES';
+import {_FONTS} from '../../constants/_FONTS';
 import {postPost} from '../../util/axios';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {newPostStyles} from '../../styles/STYLES';
+import {newPostStyles} from '../../constants/STYLES';
 import {RootStackParamList} from '../../types/RootStackParamList';
 import {Asset} from 'react-native-image-picker';
 import {MiniProfile} from '../../components/Profile/MiniProfile';
@@ -33,7 +33,7 @@ import {
   IDPostGallery,
 } from '../../interfaces/download';
 import {IField, IPost} from '../../interfaces/upload';
-import {ImagePickerModal} from '../../components/util/ImagePickerModal';
+import {ImagePickerModal} from '../../components/Modals/ImagePicker';
 import {ErrorScreen} from '../utilScreens/ErrorScreen';
 import {getFields} from '../../util/localStorage';
 import {LoadingScreen} from '../utilScreens/LoadingScreen';

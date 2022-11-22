@@ -16,11 +16,11 @@ import {
   imageStyles,
   commonStyles,
   editProfileStyles,
-} from '../../styles/STYLES';
+} from '../../constants/STYLES';
 import {USTATUS} from '../../types/enum';
 import {updatePerson} from '../../util/axios';
 import {nonEmpty, phoneValidate} from '../../util/validation';
-import {ImagePickerModal} from '../util/ImagePickerModal';
+import {ImagePickerModal} from '../Modals/ImagePicker';
 
 import {UStatusImage} from '../util/UStatusImage';
 

@@ -1,50 +1,46 @@
-import {useContext, useEffect, useLayoutEffect, useState} from 'react';
-import {AuthContext} from '../../hooks/userCtx';
+import {useState} from 'react';
 import {IDPerson} from '../../interfaces/download';
-import {IPostPropose} from '../../interfaces/upload';
 import {IDisplayPost} from '../../interfaces/view';
-import {_BUTTONS} from '../../styles/_BUTTONS';
-import {_FONTS} from '../../styles/_FONTS';
+import {_BUTTONS} from '../../constants/_BUTTONS';
+import {_FONTS} from '../../constants/_FONTS';
 import {PSTATUS, USTATUS} from '../../types/enum';
 import {statusElements} from './PostBtnsElements';
 
 export function PostButtons({
   post,
   isAngel,
+  user,
 }: {
   post: IDisplayPost;
   isAngel: boolean | null | undefined;
+  user: IDPerson;
 }) {
-  // const [success, setSuccess] = useState<USTATUS>(USTATUS.UNINIT);
-
-  const user = useContext(AuthContext).userWField.dPerson as IDPerson;
+  const [currPost, setCurrPost] = useState(post);
 
   let status =
-    post.post.postStatus + (isAngel ? Object.keys(PSTATUS).length / 2 - 1 : 0);
+    currPost.post.postStatus === undefined
+      ? PSTATUS.PENDING
+      : currPost.post.postStatus;
 
-  let proposer: IDPerson | undefined =
-    post.professionalProposers.length > 0
-      ? post.professionalProposers.find(e => e.person.id === user.person.id)
+  status += isAngel ? Object.keys(PSTATUS).length / 2 - 1 : 0;
+
+  // console.log(status);
+
+  let proposeId: number | undefined =
+    currPost.postProposes.length > 0
+      ? currPost.postProposes.find(e => e.proffessionalId === user.person.id)
+          ?.id
       : undefined;
 
-  // console.log(post.professionalProposers);
+  if (
+    currPost.post.postStatus === PSTATUS.PENDING &&
+    isAngel &&
+    undefined !== proposeId
+  ) {
+    status++;
+  }
 
-  // if (isAngel && undefined !== proposer) {
-  //   status++;
-  // }
+  // console.log(status);
 
-  // useLayoutEffect(() => {
-  // }, [success]);
-  // const IsAlreadyProposed = undefined !== proposer;
-
-  // console.log(proposer);
-
-  // console.log(proposer);
-
-  return statusElements(
-    status,
-    post,
-    user.person.id as number,
-    proposer !== undefined ? (proposer as IDPerson).person.id : undefined,
-  );
+  return statusElements(status, user, proposeId, currPost, setCurrPost);
 }

@@ -11,7 +11,7 @@ export const propseHelp = (
 ) => {
   setSuccess(USTATUS.PENDING);
   const propose: IPostPropose = {proffessionalId: proId, postId: postId};
-  postPropose(propose, setSuccess);
+  postPropose(propose);
 };
 
 export const share = (postId: number) => {
@@ -24,8 +24,9 @@ export const postReview = (postId: number, proId: number) => {
 
 export const cancelProposer = (proposeId: number, setSuccess: Function) => {
   console.log('delete');
+  setSuccess(USTATUS.PENDING);
+  deletePropose(proposeId);
 
-  deletePropose(proposeId, setSuccess);
   // console.log('cancel proposer');
 };
 
@@ -55,5 +56,5 @@ export const getReview = (postId: number, proId: number) => {
 
 export const proposeDate = (postId: number, date: Date) => {
   //get comment
-  console.log('cancel proposer');
+  console.log(date);
 };

@@ -3,8 +3,8 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {Image, Pressable, Text, View} from 'react-native';
-import {errorScreenStyles} from '../../styles/STYLES';
-import {_FONTS} from '../../styles/_FONTS';
+import {errorScreenStyles} from '../../constants/STYLES';
+import {_FONTS} from '../../constants/_FONTS';
 import {RootStackParamList} from '../../types/RootStackParamList';
 
 export function ErrorScreen() {

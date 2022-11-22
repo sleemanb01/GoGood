@@ -8,10 +8,10 @@ import {
   View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {loginStyles, ProfileSettingsStyles} from '../../styles/STYLES';
+import {loginStyles, ProfileSettingsStyles} from '../../constants/STYLES';
 import {CustGradient} from '../../components/util/CustGradient';
-import {_FONTS} from '../../styles/_FONTS';
-import {_BUTTONS} from '../../styles/_BUTTONS';
+import {_FONTS} from '../../constants/_FONTS';
+import {_BUTTONS} from '../../constants/_BUTTONS';
 import {AuthContext} from '../../hooks/userCtx';
 import {RootStackParamList} from '../../types/RootStackParamList';
 import {CloseButton} from '../../components/Buttons/CloseButton';

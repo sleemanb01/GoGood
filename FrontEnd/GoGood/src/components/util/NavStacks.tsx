@@ -14,7 +14,7 @@ import {Menu} from '../../screens/profileScreens/Menu';
 import {Profile} from '../../screens/profileScreens/Profile';
 import {ErrorScreen} from '../../screens/utilScreens/ErrorScreen';
 import {LoadingScreen} from '../../screens/utilScreens/LoadingScreen';
-import {headerStyle} from '../../styles/STYLES';
+import {headerStyle} from '../../constants/STYLES';
 import {RootStackParamList} from '../../types/RootStackParamList';
 import {MenuButton} from '../Buttons/MenuButton';
 import {NotificationButton} from '../Buttons/NotificationButton';

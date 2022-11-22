@@ -1,9 +1,9 @@
 import React from 'react';
 import {Image, View} from 'react-native';
 import {CustGradient} from '../../components/util/CustGradient';
-import {loadingStyles} from '../../styles/STYLES';
-import {_BUTTONS} from '../../styles/_BUTTONS';
-import {_FONTS} from '../../styles/_FONTS';
+import {loadingStyles} from '../../constants/STYLES';
+import {_BUTTONS} from '../../constants/_BUTTONS';
+import {_FONTS} from '../../constants/_FONTS';
 
 export function LoadingScreen() {
   return (

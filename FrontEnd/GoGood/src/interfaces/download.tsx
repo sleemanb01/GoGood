@@ -14,7 +14,7 @@ export interface IDPerson {
 export interface IDPostGallery {
   id: number;
   postId: number;
-  dGallery: string;
+  dGallery?: string;
 }
 
 export interface IPostWGallery {

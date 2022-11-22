@@ -6,11 +6,11 @@ export enum USTATUS { //upload status
 }
 
 export enum PSTATUS {
-  HANDLED,
+  CLOSED,
+  SAY_THANKS,
   PENDING,
-  ACCEPT_HELP,
+  SHOW_PROPOSERS,
   WAITING_FOR_DATE,
   IS_DATE_OK,
-  CHOOSE_ANOTHER_DATE,
   IN_HANDLE,
 }

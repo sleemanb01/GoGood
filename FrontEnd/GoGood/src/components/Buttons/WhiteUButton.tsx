@@ -1,8 +1,8 @@
 import {t} from 'i18next';
 import React from 'react';
 import {Pressable, Text} from 'react-native';
-import {_BUTTONS} from '../../styles/_BUTTONS';
-import {_FONTS} from '../../styles/_FONTS';
+import {_BUTTONS} from '../../constants/_BUTTONS';
+import {_FONTS} from '../../constants/_FONTS';
 
 export function WhiteUButton({
   onPress,

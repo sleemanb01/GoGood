@@ -9,9 +9,9 @@ import {
   View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {imageStyles, profileStyles} from '../../styles/STYLES';
-import {_FONTS} from '../../styles/_FONTS';
-import {_BUTTONS} from '../../styles/_BUTTONS';
+import {imageStyles, profileStyles} from '../../constants/STYLES';
+import {_FONTS} from '../../constants/_FONTS';
+import {_BUTTONS} from '../../constants/_BUTTONS';
 import {AuthContext} from '../../hooks/userCtx';
 import {RootStackParamList} from '../../types/RootStackParamList';
 import {useTranslation} from 'react-i18next';

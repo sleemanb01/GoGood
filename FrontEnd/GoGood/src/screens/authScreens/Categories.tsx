@@ -6,9 +6,9 @@ import {
   NativeStackNavigationProp,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import {_BUTTONS} from '../../styles/_BUTTONS';
-import {_FONTS} from '../../styles/_FONTS';
-import {categoriesStyles} from '../../styles/STYLES';
+import {_BUTTONS} from '../../constants/_BUTTONS';
+import {_FONTS} from '../../constants/_FONTS';
+import {categoriesStyles} from '../../constants/STYLES';
 import {AuthContext} from '../../hooks/userCtx';
 import {useTranslation} from 'react-i18next';
 import {postProfessionalFields} from '../../util/axios';

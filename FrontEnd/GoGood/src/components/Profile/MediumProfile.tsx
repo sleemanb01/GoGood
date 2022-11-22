@@ -1,8 +1,8 @@
 import React from 'react';
 import {View, Image, Text} from 'react-native';
 import {IDPerson} from '../../interfaces/download';
-import {mediumProfileStyles, imageStyles} from '../../styles/STYLES';
-import {_FONTS} from '../../styles/_FONTS';
+import {mediumProfileStyles, imageStyles} from '../../constants/STYLES';
+import {_FONTS} from '../../constants/_FONTS';
 
 export function MediumProfile({user}: {user: IDPerson}) {
   return (
