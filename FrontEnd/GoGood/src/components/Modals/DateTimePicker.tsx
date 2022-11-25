@@ -2,28 +2,30 @@ import React, {useState} from 'react';
 import {Button, View} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-export const DateTimePicker = () => {
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
+export const DateTimePicker = ({
+  isDatePickerVisible,
+  setDatePickerVisibility,
+  setDate,
+}: {
+  isDatePickerVisible: boolean;
+  setDatePickerVisibility: Function;
+  setDate: Function;
+}) => {
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
 
   const handleConfirm = (date: Date) => {
-    console.warn('A date has been picked: ', date);
+    setDate(date);
     hideDatePicker();
   };
 
   return (
     <View>
-      <Button title="Show Date Picker" onPress={showDatePicker} />
       <DateTimePickerModal
+        date={new Date()}
         isVisible={isDatePickerVisible}
-        mode="date"
+        mode="datetime"
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />

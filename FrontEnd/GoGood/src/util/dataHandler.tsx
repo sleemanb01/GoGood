@@ -28,7 +28,7 @@ export const adjustPostData = (dataArr: IPostsWData): IDisplayPost[] => {
     dataArr.posts.map((curr: IPost) => {
       let postProposes: IPostPropose[] = dataArr.postProposes
         ? dataArr.postProposes.filter(
-            propose => (propose.postId = curr.id as number),
+            propose => propose.postId === (curr.id as number),
           )
         : [];
 

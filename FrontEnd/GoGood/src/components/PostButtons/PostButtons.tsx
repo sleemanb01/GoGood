@@ -40,7 +40,5 @@ export function PostButtons({
     status++;
   }
 
-  // console.log(status);
-
   return statusElements(status, user, proposeId, currPost, setCurrPost);
 }

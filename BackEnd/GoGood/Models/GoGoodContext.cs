@@ -84,16 +84,16 @@ namespace GoGood.Models
                 entity.Property(e => e.FieldId).HasColumnName("fieldId");
 
                 entity.Property(e => e.HandleDate)
-                    .HasColumnType("date")
+                    .HasColumnType("datetime")
                     .HasColumnName("handleDate")
-                    .HasDefaultValueSql("(CONVERT([date],getdate(),(105)))");
+                    .HasDefaultValueSql("(CONVERT([datetime],getdate(),(127)))");
 
                 entity.Property(e => e.PersonId).HasColumnName("personId");
 
                 entity.Property(e => e.PostDate)
-                    .HasColumnType("date")
+                    .HasColumnType("datetime")
                     .HasColumnName("postDate")
-                    .HasDefaultValueSql("(CONVERT([date],getdate(),(105)))");
+                    .HasDefaultValueSql("(CONVERT([datetime],getdate(),(127)))");
 
                 entity.Property(e => e.PostDescription)
                     .HasMaxLength(200)
@@ -108,6 +108,11 @@ namespace GoGood.Models
                 entity.Property(e => e.PostTitle)
                     .HasMaxLength(50)
                     .HasColumnName("postTitle");
+
+                entity.Property(e => e.HandleDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("handleDate")
+                    .HasDefaultValueSql("(CONVERT([datetime],getdate(),(127)))");
 
                 entity.Property(e => e.ProffessionalId).HasColumnName("proffessionalId");
 
@@ -160,9 +165,9 @@ namespace GoGood.Models
                     .HasColumnName("review");
 
                 entity.Property(e => e.ReviewDate)
-                    .HasColumnType("date")
+                    .HasColumnType("datetime")
                     .HasColumnName("reviewDate")
-                    .HasDefaultValueSql("(CONVERT([date],getdate(),(105)))");
+                    .HasDefaultValueSql("(CONVERT([datetime],getdate(),(127)))");
 
                 entity.Property(e => e.ReviewerId).HasColumnName("reviewerId");
 

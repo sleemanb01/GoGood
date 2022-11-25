@@ -24,6 +24,8 @@ import {deletePropose, postPropose, putPost} from '../../util/axios';
 import {IDPerson} from '../../interfaces/download';
 import {LoadingButton} from '../Buttons/LoadingButton';
 import {RoundedProfiles} from '../util/RoundedProfiles';
+import {DateTimePicker} from '../Modals/DateTimePicker';
+import {dateToUtc, UTCToLocale} from '../../util/dateConverters';
 
 export const statusElements = (
   index: number,
@@ -182,21 +184,58 @@ export const statusElements = (
   /* ****************************************************************************** */
 
   function IsDateOk() {
-    const [success, setSuccess] = useState<USTATUS>(USTATUS.UNINIT);
+    const [isUploadSuccess, setIsUploadSuccess] = useState<USTATUS>(
+      USTATUS.UNINIT,
+    );
+
+    const handleDate = currPost.post.handleDate;
+    let date = handleDate
+      ? new Date(
+          (currPost.post.handleDate as Date).toString() + 'Z',
+        ).toLocaleString()
+      : undefined;
+
+    const onPress = async () => {
+      //set status 6
+      setIsUploadSuccess(USTATUS.PENDING);
+      let updatedPost: IPost = {
+        ...currPost.post,
+        postStatus: PSTATUS.IN_HANDLE,
+      };
+
+      const result = await putPost(updatedPost);
+
+      if (!result) {
+        setIsUploadSuccess(USTATUS.FAILED);
+      }
+
+      setCurrPost((prev: IDisplayPost) => ({
+        post: updatedPost,
+        professionalProposers: prev.professionalProposers,
+        postProposes: prev.postProposes,
+        postGallery: prev.postGallery,
+      }));
+      setIsUploadSuccess(USTATUS.UNINIT);
+    };
+
     return (
       <View style={postStyles.footerButtons}>
         <Pressable
-          onPress={() => showProposers(currPost.professionalProposers)}>
-          {/* Circuled profile picture */}
+          onPress={() =>
+            cancelProposer(proposeId as number, setIsUploadSuccess)
+          }>
+          <Text style={_FONTS.btnBlackTextWithU}>{t('cancel')}</Text>
         </Pressable>
-        <Pressable
-          onPress={() => cancelProposer(proposeId as number, setSuccess)}
-          style={_BUTTONS.activeBtn2}>
-          <Text style={_FONTS.btnBlackTextSmall}>{t('cancel')}</Text>
-        </Pressable>
-        <Pressable onPress={() => confirmDate(postId)}>
-          <Text>{t('confirmDate')}</Text>
-        </Pressable>
+        <View>
+          {isLoading(isUploadSuccess) || (
+            <React.Fragment>
+              <Text>{date}</Text>
+              <Pressable style={_BUTTONS.activeBtn2} onPress={onPress}>
+                <Text>{t('confirmDate')}</Text>
+              </Pressable>
+            </React.Fragment>
+          )}
+        </View>
       </View>
     );
   }
@@ -243,7 +282,7 @@ export const statusElements = (
     const onPress = async () => {
       setUploadStatus(USTATUS.PENDING);
       let propose = {
-        proffessionalId: currPost.post.id as number,
+        proffessionalId: userId,
         postId: postId,
       };
 
@@ -254,13 +293,13 @@ export const statusElements = (
       } else {
         propose = data;
 
-        setUploadStatus(USTATUS.UNINIT);
         setCurrPost((prev: IDisplayPost) => ({
           post: prev.post,
           professionalProposers: [...prev.professionalProposers, user],
           postProposes: [...prev.postProposes, propose],
           postGallery: prev.postGallery,
         }));
+        setUploadStatus(USTATUS.UNINIT);
       }
     };
 
@@ -318,44 +357,60 @@ export const statusElements = (
   /* ****************************************************************************** */
 
   function SetDate() {
-    const [success, setSuccess] = useState<USTATUS>(USTATUS.UNINIT);
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [uploadStatus, setUploadStatus] = useState<USTATUS>(USTATUS.UNINIT);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [date, setDate] = useState<Date | null>(null);
 
     useEffect(() => {
       if (date !== null) {
-        proposeDate(postId, date);
+        (async () => {
+          setUploadStatus(USTATUS.PENDING);
+          let updatedPost: IPost = {
+            ...currPost.post,
+            handleDate: date,
+            postStatus: PSTATUS.IS_DATE_OK,
+          };
+          const result = await putPost(updatedPost);
+
+          if (!result) {
+            setUploadStatus(USTATUS.FAILED);
+          }
+          setCurrPost((prev: IDisplayPost) => ({
+            post: updatedPost,
+            professionalProposers: prev.professionalProposers,
+            postProposes: prev.postProposes,
+            postGallery: prev.postGallery,
+          }));
+          setUploadStatus(USTATUS.UNINIT);
+        })();
       }
     }, [date]);
 
     const pressHandler = () => {
-      // setIsModalVisible(true);
-      // return (
-      //   <DatePickerModal
-      //     // isModalVisible={isModalVisible}
-      //     // setIsModalVisible={setIsModalVisible}
-      //     setDate={setDate}
-      //   />
-      // );
+      setDatePickerVisibility(true);
     };
 
     return (
-      <View style={postStyles.footerButtons}>
-        <Pressable
-          onPress={() => cancelProposer(proposeId as number, setSuccess)}>
-          <Text style={_FONTS.btnBlackTextWithU}>{t('cancel')}</Text>
-        </Pressable>
-        <Pressable onPress={pressHandler} style={_BUTTONS.activeBtn2}>
-          <Text style={_FONTS.btnBlackTextSmall}>{t('setDate')}</Text>
-        </Pressable>
-        {/* {isModalVisible || (
-          <DatePickerModal
-            // isModalVisible={isModalVisible}
-            // setIsModalVisible={setIsModalVisible}
-            setDate={setDate}
-          />
-        )} */}
-      </View>
+      <React.Fragment>
+        <View style={postStyles.footerButtons}>
+          <Pressable
+            onPress={() =>
+              cancelProposer(proposeId as number, setUploadStatus)
+            }>
+            <Text style={_FONTS.btnBlackTextWithU}>{t('cancel')}</Text>
+          </Pressable>
+          {isLoading(uploadStatus) || (
+            <Pressable onPress={pressHandler} style={_BUTTONS.activeBtn2}>
+              <Text style={_FONTS.btnBlackTextSmall}>{t('setDate')}</Text>
+            </Pressable>
+          )}
+        </View>
+        <DateTimePicker
+          isDatePickerVisible={isDatePickerVisible}
+          setDatePickerVisibility={setDatePickerVisibility}
+          setDate={setDate}
+        />
+      </React.Fragment>
     );
   }
 

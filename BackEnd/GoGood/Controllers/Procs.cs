@@ -261,8 +261,17 @@ namespace GoGood
                         {
                             post.ProffessionalId = null;
                         }
-                        post.PostStatus = dr.GetInt32(8);
-                        post.FieldId = dr.GetInt32(9);
+                        var hDate = dr.GetValue(8);
+                        if (!DBNull.Value.Equals(hDate))
+                        {
+                            post.HandleDate = dr.GetDateTime(8);
+                        }
+                        else
+                        {
+                            post.HandleDate = null;
+                        }
+                        post.PostStatus = dr.GetInt32(9);
+                        post.FieldId = dr.GetInt32(10);
 
                         posts.Add(post);
                     }

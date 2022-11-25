@@ -33,6 +33,8 @@ export function MyRequests({
     });
   };
 
+  // console.log(user);
+
   return (
     <React.Fragment>
       <Sort />

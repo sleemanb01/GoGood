@@ -97,13 +97,13 @@ CREATE TABLE Post(
 	id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	postTitle nvarchar(50),
 	postDescription nvarchar(200),
-	postDate date DEFAULT CONVERT(DATE, GETDATE(),105),
+	postDate DATETIME DEFAULT CONVERT(DATETIME, GETDATE(),127),
 	personId int FOREIGN KEY REFERENCES Person(id),
 	fieldId int FOREIGN KEY REFERENCES Field(id),
 	postLat FLOAT,
 	postLng FLOAT,
 	proffessionalId INT FOREIGN KEY REFERENCES Person(id),
-	handleDate date DEFAULT CONVERT(DATE, GETDATE(),105),
+	handleDate DATETIME,
 	postStatus int,
 	isDelete BIT
 )
@@ -123,7 +123,7 @@ CREATE TABLE ProfessionalReview(
 	ProfessionalId int FOREIGN KEY REFERENCES Person(id),
 	postId INT FOREIGN KEY REFERENCES Post(id),
 	reviewerId int FOREIGN KEY REFERENCES Person(id),
-	reviewDate date DEFAULT CONVERT(DATE, GETDATE(),105),
+	reviewDate DATETIME DEFAULT CONVERT(DATETIME, GETDATE(),127),
 	review nvarchar(100)
 )
 

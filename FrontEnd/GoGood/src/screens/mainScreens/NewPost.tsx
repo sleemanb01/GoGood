@@ -34,9 +34,9 @@ import {
 } from '../../interfaces/download';
 import {IField, IPost} from '../../interfaces/upload';
 import {ImagePickerModal} from '../../components/Modals/ImagePicker';
-import {ErrorScreen} from '../utilScreens/ErrorScreen';
 import {getFields} from '../../util/localStorage';
 import {LoadingScreen} from '../utilScreens/LoadingScreen';
+import {dateToIso} from '../../util/dateConverters';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'NewPost'>;
 
@@ -93,6 +93,8 @@ export function NewPost({route, navigation}: Props) {
     } else if (!nonEmpty(content)) {
       contentRef.current?.focus();
     } else {
+      // console.log(new Date());
+
       let postToPost: IPost = {
         postTitle: title,
         postDescription: content,
@@ -125,7 +127,7 @@ export function NewPost({route, navigation}: Props) {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <React.Fragment>
           <View style={newPostStyles.headerContainer}>
-            <MiniProfile user={user} />
+            <MiniProfile user={user.dPerson as IDPerson} />
           </View>
           <View style={newPostStyles.mainContainer}>
             <Dropdown

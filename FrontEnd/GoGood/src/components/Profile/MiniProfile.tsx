@@ -1,11 +1,11 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {View, Image, Pressable, Text} from 'react-native';
-import {IDPerson, IPersonWFields} from '../../interfaces/download';
+import {IDPerson} from '../../interfaces/download';
 import {commonStyles, imageStyles} from '../../constants/STYLES';
 import {_FONTS} from '../../constants/_FONTS';
 
-export function MiniProfile({user}: {user: IDPerson | undefined}) {
+export function MiniProfile({user}: {user: IDPerson}) {
   const {t} = useTranslation();
 
   user = user as IDPerson;

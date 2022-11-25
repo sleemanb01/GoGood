@@ -236,7 +236,7 @@ CREATE PROCEDURE getPostsByPerson
 
 as
 Begin
-	select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId
+	select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.handleDate , Post.postStatus, Post.fieldId
 	  from Post
 	  WHERE Post.isDelete = 0 AND Post.personId = @PersonId
 
@@ -274,7 +274,7 @@ CREATE PROCEDURE getPostsByPro
 
 as
 Begin
- select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId into #postTable 
+ select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.handleDate, Post.postStatus, Post.fieldId into #postTable 
 	  from Post left JOIN Field 
 	  ON Field.id = Post.fieldId 
 	  WHERE Post.isDelete = 0 AND Post.proffessionalId = @proId
@@ -311,7 +311,7 @@ GO
  AS
  BEGIN
       
-      select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.postStatus, Post.fieldId
+      select Post.id, Post.postTitle, Post.postDescription, postDate, Post.personId, Post.postLng, Post.postLat, Post.proffessionalId, Post.handleDate, Post.postStatus, Post.fieldId
 	  from Post left JOIN Field 
 	  ON Field.id = Post.fieldId 
 	  WHERE Post.isDelete = 0 AND Post.postStatus !=0 AND
