@@ -70,79 +70,79 @@ GO
 
 -------------------------------------------------------
 -- Create tables
+
 CREATE TABLE Field(
-	id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	fieldName nvarchar(50)
+	id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	fieldName NVARCHAR(50)
 )
 ----------------------------------------------------------
 
 CREATE TABLE Person(
-	id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	uname nvarchar(50),
-	phone nvarchar(15),
-	isAngel Bit,
+	id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	uname NVARCHAR(50),
+	phone NVARCHAR(15),
+	isAngel BIT,
 )
 
 ----------------------------------------------------------
 
 CREATE TABLE PersonImage(
-	id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	personId int foreign key references Person(id),
-	pImage varbinary(max),
+	id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	personId INT foreign key references Person(id),
+	pImage VARBINARY(max),
 )
 
 -------------------------------------------------------
 
 CREATE TABLE Post(
-	id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	postTitle nvarchar(50),
-	postDescription nvarchar(200),
+	id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	postTitle NVARCHAR(50),
+	postDescription NVARCHAR(200),
 	postDate DATETIME DEFAULT CONVERT(DATETIME, GETDATE(),127),
-	personId int FOREIGN KEY REFERENCES Person(id),
-	fieldId int FOREIGN KEY REFERENCES Field(id),
+	personId INT FOREIGN KEY REFERENCES Person(id),
+	fieldId INT FOREIGN KEY REFERENCES Field(id),
 	postLat FLOAT,
 	postLng FLOAT,
 	proffessionalId INT FOREIGN KEY REFERENCES Person(id),
 	handleDate DATETIME,
-	postStatus int,
+	postStatus INT,
 	isDelete BIT
 )
 
 ----------------------------------------------------------
 
 CREATE TABLE ProfessionalField(
-	id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	personId int FOREIGN KEY REFERENCES Person(id),
-	fieldId int FOREIGN KEY REferences Field(id)
+	id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	personId INT FOREIGN KEY REFERENCES Person(id),
+	fieldId INT FOREIGN KEY REferences Field(id)
 )
 
 ----------------------------------------------------------
 
 CREATE TABLE ProfessionalReview(
-	id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	ProfessionalId int FOREIGN KEY REFERENCES Person(id),
+	id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	ProfessionalId INT FOREIGN KEY REFERENCES Person(id),
 	postId INT FOREIGN KEY REFERENCES Post(id),
-	reviewerId int FOREIGN KEY REFERENCES Person(id),
+	reviewerId INT FOREIGN KEY REFERENCES Person(id),
 	reviewDate DATETIME DEFAULT CONVERT(DATETIME, GETDATE(),127),
-	review nvarchar(100)
+	review NVARCHAR(100)
 )
 
 -------------------------------------------------------
 
 CREATE TABLE PostPropose(
-	id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	proffessionalId INT FOREIGN KEY REFERENCES Person(id),
 	postId INT FOREIGN KEY REFERENCES Post(id),
 )
 
 CREATE TABLE PostGallery(
-	id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	postId INT FOREIGN KEY REFERENCES Post(id),
-	gallery varbinary(max),
+	gallery VARBINARY(max),
 )
 
 --------------------------------------------------------
-
 
 INSERT INTO Field VALUES
 (N'כללי'),
@@ -152,63 +152,24 @@ INSERT INTO Field VALUES
 (N'הובלה'),
 (N'משחקים');
 
+--------------------------------------------------------
 
---INSERT INTO Person VALUES
---(N'אבי מלכה', '1111111111'),
---(N'איציק כהן', '2221111111'),
---(N'מיקה שובל', '3331111111' ),
---(N'דני אבודבול', '4441111111'),
---(N'דורון חיים', '5551111111'),
---(N'שחר חסון', '6661111111' );
+--SELECT * FROM PersonImage
 
+--SELECT * FROM Person
 
---INSERT INTO Post VALUES
---(N'ניקוי גינה', N'אם יש פה מישהו שמוכן לעזור לי לנקות את הגינה', '1998-03-21',1,1,31.964506306707936, 34.77783014153068,3,0,0),
---(N'תיקון אלקטרוניקה', N'יש לי בעיה במזגן', '2001-05-15',1,2,32.00504574325504, 34.76568276544381,4,0,0),
---(N'עזרה בתרופות', N'אני מבקשת תרופות...',  '2002-07-21' ,2,3,32.03982836595897, 34.750881801295776,5,1,0),
---(N'עזרה בעוד תרופות', N'מבקשת שמישהו יעזור לי עם תרופות***', '1999-09-30',2,3,32.065451711573175, 34.777286518503125,6,2,0);
+--SELECT * FROM Field
 
---INSERT INTO ProfessionalField VALUES
---(1,3),
---(1,2),
---(2,1),
---(3,1)
+--SELECT * FROM Post
 
+--SELECT * FROM PostGallery
 
---INSERT INTO ProfessionalReview VALUES
---(1, 5, '2022-03-1',N'תותח'),
---(1, 2,'2022-03-2',N'יפה מאוד'),
---(2 ,1,'2022-03-3',N'לא רע'),
---(3, 1, '2022-03-4' ,N'מעולה');
+--SELECT * FROM ProfessionalInfo
 
-------------------------------------------------------------
+--SELECT * FROM ProfessionalField
 
+--SELECT * FROM ProfessionalReview
 
---INSERT INTO PostPropose VALUES
---(3, 1),
---(4, 2),
---(5, 3),
---(6, 3),
---(5, 4),
---(6, 4);
+--SELECT * FROM PostImage
 
-
-select * from PersonImage
-
-select * from Person
-
---select * from Field
-
-select * from Post
-
---select * from PostGallery
-
---select * from ProfessionalInfo
-
-select * from ProfessionalField
-
---select * from ProfessionalReview
-
---select * from PostImage
-
-select * from PostPropose
+--SELECT * FROM PostPropose
