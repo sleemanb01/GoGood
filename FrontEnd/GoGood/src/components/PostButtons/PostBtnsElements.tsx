@@ -9,23 +9,16 @@ import {_FONTS} from '../../constants/_FONTS';
 import {PSTATUS, USTATUS} from '../../types/enum';
 import {
   cancelProposer,
-  postReview,
   showProposers,
-  acceptProposer,
   share,
-  propseHelp,
-  confirmDate,
   postHandled,
   getReview,
-  proposeDate,
 } from './PostBtnsFuncs';
-import {Created} from '../../constants/HttpResponses';
 import {deletePropose, postPropose, putPost} from '../../util/axios';
 import {IDPerson} from '../../interfaces/download';
 import {LoadingButton} from '../Buttons/LoadingButton';
 import {RoundedProfiles} from '../util/RoundedProfiles';
 import {DateTimePicker} from '../Modals/DateTimePicker';
-import {dateToUtc, UTCToLocale} from '../../util/dateConverters';
 
 export const statusElements = (
   index: number,
@@ -63,7 +56,6 @@ export const statusElements = (
         const result = await putPost(updatedPost);
 
         if (!result) {
-          // console.log('fsiled');
           setIsUploadSuccess(USTATUS.FAILED);
         }
 
@@ -78,7 +70,6 @@ export const statusElements = (
 
       if (professionalId !== 0) {
         upload();
-        // console.log(professionalId);
       }
     }, [professionalId]);
 
@@ -423,6 +414,7 @@ export const statusElements = (
     SetDate(),
     WaitingForDateAccept(),
     AngelHandling(),
+    WaitingForAccept(), //no status in the DB
   ];
 
   return elementsArr[index];

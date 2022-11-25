@@ -69,7 +69,6 @@ namespace GoGood.Controllers
 
                 post = postWGallery.post;
                 post.IsDelete = 0;
-                post.PostStatus = 2;
                 _context.Posts.Add(post);
 
                 await _context.SaveChangesAsync();

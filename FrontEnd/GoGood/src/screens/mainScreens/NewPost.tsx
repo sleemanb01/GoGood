@@ -37,6 +37,7 @@ import {ImagePickerModal} from '../../components/Modals/ImagePicker';
 import {getFields} from '../../util/localStorage';
 import {LoadingScreen} from '../utilScreens/LoadingScreen';
 import {dateToIso} from '../../util/dateConverters';
+import {PSTATUS} from '../../types/enum';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'NewPost'>;
 
@@ -103,6 +104,7 @@ export function NewPost({route, navigation}: Props) {
         postLng: position?.coords.longitude,
         postLat: position?.coords.latitude,
         fieldId: selected.id,
+        postStatus: PSTATUS.PENDING,
       };
 
       let dGallery: IDPostGallery[] = [];

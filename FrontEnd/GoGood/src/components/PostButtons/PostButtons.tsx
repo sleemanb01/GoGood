@@ -3,7 +3,7 @@ import {IDPerson} from '../../interfaces/download';
 import {IDisplayPost} from '../../interfaces/view';
 import {_BUTTONS} from '../../constants/_BUTTONS';
 import {_FONTS} from '../../constants/_FONTS';
-import {PSTATUS, USTATUS} from '../../types/enum';
+import {PSTATUS} from '../../types/enum';
 import {statusElements} from './PostBtnsElements';
 
 export function PostButtons({
@@ -22,9 +22,9 @@ export function PostButtons({
       ? PSTATUS.PENDING
       : currPost.post.postStatus;
 
-  status += isAngel ? Object.keys(PSTATUS).length / 2 - 1 : 0;
+  const statusesLength = Object.keys(PSTATUS).length / 2;
 
-  // console.log(status);
+  status += isAngel ? statusesLength : 0;
 
   let proposeId: number | undefined =
     currPost.postProposes.length > 0
@@ -37,7 +37,7 @@ export function PostButtons({
     isAngel &&
     undefined !== proposeId
   ) {
-    status++;
+    status = statusesLength * 2; // this will return a statusless(DB wise) component
   }
 
   return statusElements(status, user, proposeId, currPost, setCurrPost);
