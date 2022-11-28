@@ -390,5 +390,20 @@ namespace GoGood
             }
         }
 
+        public static void cleanPropose(int proposeId, int postId)
+        {
+            using (SqlConnection con = new SqlConnection(conStr))
+            {
+                using (SqlCommand cmd = new SqlCommand("cleanPropose", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@proposeId", proposeId);
+                    cmd.Parameters.AddWithValue("@postId", postId);
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader(); // running the SP
+                }
+            }
+        }
+
     }
 }

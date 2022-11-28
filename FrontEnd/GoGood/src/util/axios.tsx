@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {OK, NoContent, Created} from '../constants/HttpResponses';
+import {OK, NoContent, Created, NotFound} from '../constants/HttpResponses';
 import {IPostWGallery, IDPerson, IPersonWFields} from '../interfaces/download';
 import {
   IPerson,
@@ -124,6 +124,23 @@ export async function updatePerson(user: IDPerson, setSuccess: Function) {
   } catch (err) {
     console.log(err);
     setSuccess(USTATUS.FAILED);
+  }
+}
+
+/* *************************** */
+export async function cleanPropose(proposeId: number, postId: number) {
+  try {
+    const controller = 'PostProposes/cleanPropose/';
+    const result = await axios.post(url + controller + proposeId, postId);
+
+    if (result.status === NotFound) {
+      throw NotFound;
+    }
+
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
   }
 }
 

@@ -160,7 +160,7 @@ INSERT INTO Field VALUES
 
 --SELECT * FROM Field
 
---SELECT * FROM Post
+SELECT * FROM Post
 
 --SELECT * FROM PostGallery
 
@@ -172,4 +172,4 @@ INSERT INTO Field VALUES
 
 --SELECT * FROM PostImage
 
---SELECT * FROM PostPropose
+SELECT * FROM PostPropose

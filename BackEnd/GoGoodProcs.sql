@@ -23,6 +23,36 @@ GO
 
 --------------------------------------------------------
 
+CREATE PROCEDURE cleanPropose
+@proposeId INT,
+@postId INT
+
+AS
+BEGIN
+
+	DECLARE @defaultStatus INT = 2
+
+	DELETE FROM PostPropose WHERE PostPropose.id = @proposeId
+	DECLARE @isPro INT = (SELECT Post.proffessionalId FROM Post WHERE Post.id = @postId)
+
+	IF @isPro IS NOT NULL
+	BEGIN
+		UPDATE Post
+		SET proffessionalId = NULL, postStatus = @defaultStatus
+		WHERE Post.id = @postId
+	END
+
+END
+GO
+
+--DROP Procedure cleanPropose
+--GO
+
+--exec cleanPropose '1,5'
+--GO
+
+--------------------------------------------------------
+
 CREATE PROCEDURE getGallery
 @List NVARCHAR(MAX)
 

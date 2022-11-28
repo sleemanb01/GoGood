@@ -45,6 +45,21 @@ namespace GoGood.Controllers
             return CreatedAtAction("GetPostPropose", new { id = postPropose.Id }, postPropose);
         }
 
+        // DELETE: api/PostProposes/cleanPropose/2
+        [HttpPost("cleanPropose/{proposeId}")]
+        public async Task<IActionResult> cleanPropose(int proposeId, [FromBody] int postId)
+        {
+            var postPropose = await _context.PostProposes.FindAsync(proposeId);
+            if (postPropose == null)
+            {
+                return NotFound();
+            }
+
+            Procs.cleanPropose(proposeId, postId);
+
+            return NoContent();
+        }
+
         // DELETE: api/PostProposes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePostPropose(int id)
@@ -60,6 +75,7 @@ namespace GoGood.Controllers
 
             return NoContent();
         }
+
 
         private bool PostProposeExists(int id)
         {

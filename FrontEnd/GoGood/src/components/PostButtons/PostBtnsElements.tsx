@@ -14,7 +14,12 @@ import {
   postHandled,
   getReview,
 } from './PostBtnsFuncs';
-import {deletePropose, postPropose, putPost} from '../../util/axios';
+import {
+  cleanPropose,
+  deletePropose,
+  postPropose,
+  putPost,
+} from '../../util/axios';
 import {IDPerson} from '../../interfaces/download';
 import {LoadingButton} from '../Buttons/LoadingButton';
 import {RoundedProfiles} from '../util/RoundedProfiles';
@@ -31,6 +36,10 @@ export const statusElements = (
   const postId = currPost.post.id as number;
   const userId = user.person.id as number;
 
+  const [isUploadSuccess, setIsUploadSuccess] = useState<USTATUS>(
+    USTATUS.UNINIT,
+  );
+
   /* ****************************************************************************** */
 
   function Handled() {
@@ -41,9 +50,6 @@ export const statusElements = (
 
   function Pending() {
     const [professionalId, setProfessionalId] = useState(0);
-    const [isUploadSuccess, setIsUploadSuccess] = useState<USTATUS>(
-      USTATUS.UNINIT,
-    );
 
     useEffect(() => {
       const upload = async () => {
@@ -91,37 +97,13 @@ export const statusElements = (
   /* ****************************************************************************** */
 
   function WaitingForDate() {
-    const [isUploadSuccess, setIsUploadSuccess] = useState<USTATUS>(
-      USTATUS.UNINIT,
-    );
-
-    const cancelHandler = async () => {
-      setIsUploadSuccess(USTATUS.PENDING);
-      let updatedPost: IPost = {
-        ...currPost.post,
-        proffessionalId: undefined,
-        postStatus: PSTATUS.PENDING,
-      };
-
-      const result = await putPost(updatedPost);
-
-      if (!result) {
-        setIsUploadSuccess(USTATUS.FAILED);
-      }
-
-      setCurrPost((prev: IDisplayPost) => ({
-        post: updatedPost,
-        professionalProposers: prev.professionalProposers,
-        postProposes: prev.postProposes,
-        postGallery: prev.postGallery,
-      }));
-      setIsUploadSuccess(USTATUS.UNINIT);
-    };
-
     return (
       <View style={postStyles.footerButtons}>
         {isLoading(isUploadSuccess) || (
-          <Pressable onPress={cancelHandler}>
+          <Pressable
+            onPress={() =>
+              cancelProposerHandler(currPost.post.proffessionalId as number)
+            }>
             <Text style={_FONTS.btnBlackTextWithU}>{t('cancel')}</Text>
           </Pressable>
         )}
@@ -133,10 +115,6 @@ export const statusElements = (
   /* ****************************************************************************** */
 
   function IsDateOk() {
-    const [isUploadSuccess, setIsUploadSuccess] = useState<USTATUS>(
-      USTATUS.UNINIT,
-    );
-
     const handleDate = currPost.post.handleDate;
     let date = handleDate
       ? new Date(
@@ -145,7 +123,6 @@ export const statusElements = (
       : undefined;
 
     const onPress = async () => {
-      //set status 6
       setIsUploadSuccess(USTATUS.PENDING);
       let updatedPost: IPost = {
         ...currPost.post,
@@ -192,11 +169,12 @@ export const statusElements = (
   /* ****************************************************************************** */
 
   function InHandle() {
-    const [success, setSuccess] = useState<USTATUS>(USTATUS.UNINIT);
     return (
       <View style={postStyles.footerButtons}>
         <Pressable
-          onPress={() => cancelProposer(proposeId as number, setSuccess)}>
+          onPress={() =>
+            cancelProposerHandler(currPost.post.proffessionalId as number)
+          }>
           <Text style={_FONTS.btnBlackTextWithU}>{t('cancel')}</Text>
         </Pressable>
         <Pressable
@@ -226,10 +204,8 @@ export const statusElements = (
   /* ****************************************************************************** */
 
   function ProposeHelp() {
-    const [uploadStatus, setUploadStatus] = useState<USTATUS>(USTATUS.UNINIT);
-
     const onPress = async () => {
-      setUploadStatus(USTATUS.PENDING);
+      setIsUploadSuccess(USTATUS.PENDING);
       let propose = {
         proffessionalId: userId,
         postId: postId,
@@ -238,7 +214,7 @@ export const statusElements = (
       const data = await postPropose(propose);
 
       if (data === undefined) {
-        setUploadStatus(USTATUS.FAILED);
+        setIsUploadSuccess(USTATUS.FAILED);
       } else {
         propose = data;
 
@@ -248,7 +224,7 @@ export const statusElements = (
           postProposes: [...prev.postProposes, propose],
           postGallery: prev.postGallery,
         }));
-        setUploadStatus(USTATUS.UNINIT);
+        setIsUploadSuccess(USTATUS.UNINIT);
       }
     };
 
@@ -257,7 +233,7 @@ export const statusElements = (
         <Pressable onPress={() => share(currPost.post.id as number)}>
           <Text style={_FONTS.btnBlackTextWithU}>{t('shareRequest')}</Text>
         </Pressable>
-        {isLoading(uploadStatus) || (
+        {isLoading(isUploadSuccess) || (
           <Pressable style={_BUTTONS.activeBtn2} onPress={onPress}>
             <Text style={_FONTS.btnBlackTextWithU}>{t('propseHelp')}</Text>
           </Pressable>
@@ -269,14 +245,13 @@ export const statusElements = (
   /* ****************************************************************************** */
 
   function SetDate() {
-    const [uploadStatus, setUploadStatus] = useState<USTATUS>(USTATUS.UNINIT);
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [date, setDate] = useState<Date | null>(null);
 
     useEffect(() => {
       if (date !== null) {
         (async () => {
-          setUploadStatus(USTATUS.PENDING);
+          setIsUploadSuccess(USTATUS.PENDING);
           let updatedPost: IPost = {
             ...currPost.post,
             handleDate: date,
@@ -285,7 +260,7 @@ export const statusElements = (
           const result = await putPost(updatedPost);
 
           if (!result) {
-            setUploadStatus(USTATUS.FAILED);
+            setIsUploadSuccess(USTATUS.FAILED);
           }
           setCurrPost((prev: IDisplayPost) => ({
             post: updatedPost,
@@ -293,7 +268,7 @@ export const statusElements = (
             postProposes: prev.postProposes,
             postGallery: prev.postGallery,
           }));
-          setUploadStatus(USTATUS.UNINIT);
+          setIsUploadSuccess(USTATUS.UNINIT);
         })();
       }
     }, [date]);
@@ -305,13 +280,10 @@ export const statusElements = (
     return (
       <React.Fragment>
         <View style={postStyles.footerButtons}>
-          <Pressable
-            onPress={() =>
-              cancelProposer(proposeId as number, setUploadStatus)
-            }>
+          <Pressable onPress={() => cancelProposerHandler(userId)}>
             <Text style={_FONTS.btnBlackTextWithU}>{t('cancel')}</Text>
           </Pressable>
-          {isLoading(uploadStatus) || (
+          {isLoading(isUploadSuccess) || (
             <Pressable onPress={pressHandler} style={_BUTTONS.activeBtn2}>
               <Text style={_FONTS.btnBlackTextSmall}>{t('setDate')}</Text>
             </Pressable>
@@ -329,17 +301,15 @@ export const statusElements = (
   /* ****************************************************************************** */
 
   function WaitingForAccept(): JSX.Element {
-    const [uploadStatus, setUploadStatus] = useState<USTATUS>(USTATUS.UNINIT);
-
     const onPress = async () => {
-      setUploadStatus(USTATUS.PENDING);
+      setIsUploadSuccess(USTATUS.PENDING);
 
       const data = await deletePropose(proposeId as number);
 
       if (data === undefined) {
-        setUploadStatus(USTATUS.FAILED);
+        setIsUploadSuccess(USTATUS.FAILED);
       } else {
-        setUploadStatus(USTATUS.UNINIT);
+        setIsUploadSuccess(USTATUS.UNINIT);
         setCurrPost((prev: IDisplayPost) => ({
           post: prev.post,
           professionalProposers: prev.professionalProposers.filter(
@@ -353,7 +323,7 @@ export const statusElements = (
 
     return (
       <View style={postStyles.footerButtons}>
-        {isLoading(uploadStatus) || (
+        {isLoading(isUploadSuccess) || (
           <Pressable onPress={onPress}>
             <Text style={_FONTS.btnBlackTextWithU}>{t('cancel')}</Text>
           </Pressable>
@@ -366,11 +336,9 @@ export const statusElements = (
   /* ****************************************************************************** */
 
   function WaitingForDateAccept() {
-    const [success, setSuccess] = useState<USTATUS>(USTATUS.UNINIT);
     return (
       <View style={postStyles.footerButtons}>
-        <Pressable
-          onPress={() => cancelProposer(proposeId as number, setSuccess)}>
+        <Pressable onPress={() => cancelProposerHandler(userId)}>
           <Text style={_FONTS.btnBlackTextWithU}>{t('cancel')}</Text>
         </Pressable>
         <Text style={_FONTS.btnBlackTextSmall}>
@@ -383,11 +351,9 @@ export const statusElements = (
   /* ****************************************************************************** */
 
   function AngelHandling() {
-    const [success, setSuccess] = useState<USTATUS>(USTATUS.UNINIT);
     return (
       <View style={postStyles.footerButtons}>
-        <Pressable
-          onPress={() => cancelProposer(proposeId as number, setSuccess)}>
+        <Pressable onPress={() => cancelProposerHandler(userId)}>
           <Text style={_FONTS.btnBlackTextWithU}>{t('cancel')}</Text>
         </Pressable>
         <Text style={_FONTS.btnBlackTextSmall}>{t('handling')}</Text>
@@ -403,6 +369,44 @@ export const statusElements = (
     }
   };
 
+  const cancelProposerHandler = async (proposeId: number) => {
+    setIsUploadSuccess(USTATUS.PENDING);
+    let updatedPost: IPost = {
+      ...currPost.post,
+      proffessionalId: undefined,
+      postStatus: PSTATUS.PENDING,
+    };
+
+    const result = await cleanPropose(proposeId, postId);
+
+    if (!result) {
+      setIsUploadSuccess(USTATUS.FAILED);
+      return;
+    }
+
+    let proId = 0;
+    let updatedProposers: IPostPropose[] = [];
+
+    for (let i = 0; i < currPost.postProposes.length; i++) {
+      let tmp = currPost.postProposes[i];
+      if (tmp.id === proposeId) {
+        proId = tmp.proffessionalId;
+      } else {
+        updatedProposers = [...updatedProposers, tmp];
+      }
+    }
+
+    setCurrPost((prev: IDisplayPost) => ({
+      post: updatedPost,
+      professionalProposers: prev.professionalProposers.filter(
+        e => e.person.id !== proId,
+      ),
+      postProposes: updatedProposers,
+      postGallery: prev.postGallery,
+    }));
+    setIsUploadSuccess(USTATUS.UNINIT);
+  };
+
   const elementsArr: JSX.Element[] = [
     Handled(),
     Pending(),
@@ -414,7 +418,7 @@ export const statusElements = (
     SetDate(),
     WaitingForDateAccept(),
     AngelHandling(),
-    WaitingForAccept(), //no status in the DB
+    WaitingForAccept(), //due to multiple proposers, no status in DB
   ];
 
   return elementsArr[index];
