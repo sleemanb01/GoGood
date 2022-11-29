@@ -36,7 +36,7 @@ namespace GoGood.Controllers
 
         // POST: api/PostProposes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost] 
         public async Task<ActionResult<PostPropose>> PostPostPropose(PostPropose postPropose)
         {
             _context.PostProposes.Add(postPropose);
@@ -46,9 +46,10 @@ namespace GoGood.Controllers
         }
 
         // DELETE: api/PostProposes/cleanPropose/2
-        [HttpPost("cleanPropose/{proposeId}")]
-        public async Task<IActionResult> cleanPropose(int proposeId, [FromBody] int postId)
+        [HttpPost("cleanPropose/{postId}")]
+        public async Task<IActionResult> cleanPropose([FromRoute] int postId, [FromBody] int proposeId)
         {
+            // var id = propose.Id;
             var postPropose = await _context.PostProposes.FindAsync(proposeId);
             if (postPropose == null)
             {

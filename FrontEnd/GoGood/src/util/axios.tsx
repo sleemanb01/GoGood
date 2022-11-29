@@ -128,10 +128,10 @@ export async function updatePerson(user: IDPerson, setSuccess: Function) {
 }
 
 /* *************************** */
-export async function cleanPropose(proposeId: number, postId: number) {
+export async function cleanPropose(propose: IPostPropose, postId: number) {
   try {
     const controller = 'PostProposes/cleanPropose/';
-    const result = await axios.post(url + controller + proposeId, postId);
+    const result = await axios.post(url + controller + postId, propose.id);
 
     if (result.status === NotFound) {
       throw NotFound;

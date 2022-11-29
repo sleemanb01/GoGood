@@ -30,12 +30,12 @@ CREATE PROCEDURE cleanPropose
 AS
 BEGIN
 
-	DECLARE @defaultStatus INT = 2
+	DECLARE @defaultStatus INT = 1
 
 	DELETE FROM PostPropose WHERE PostPropose.id = @proposeId
-	DECLARE @isPro INT = (SELECT Post.proffessionalId FROM Post WHERE Post.id = @postId)
+	DECLARE @proId INT = (SELECT Post.proffessionalId FROM Post WHERE Post.id = @postId)
 
-	IF @isPro IS NOT NULL
+	IF @proId IS NOT NULL
 	BEGIN
 		UPDATE Post
 		SET proffessionalId = NULL, postStatus = @defaultStatus
