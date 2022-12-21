@@ -6,11 +6,11 @@ And allow professional users to respond to them.
 
 * It is developed with: React Native, TypeScript, .Net, SQL, Postman.
 
-* The App is developed with the conseration of multiple code principles:
+* The App is developed with the conservation of multiple code principles:
 1- High cohesion.
 2- Loose coupling.
 3- Separation of concerns.
-4- Reusablity.
+4- Reusability.
 5- Testability.
 
 
